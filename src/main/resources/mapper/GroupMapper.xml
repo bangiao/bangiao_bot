@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhazha.cqbot.mapper.GroupMapper">
+  <resultMap id="BaseResultMap" type="com.zhazha.cqbot.bean.Group">
+    <!--@mbg.generated-->
+    <!--@Table "group"-->
+    <id column="id" jdbcType="LONGVARCHAR" property="id" />
+    <result column="name" jdbcType="LONGVARCHAR" property="name" />
+    <result column="create_id" jdbcType="LONGVARCHAR" property="createId" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, "name", create_id, create_time
+  </sql>
+</mapper>

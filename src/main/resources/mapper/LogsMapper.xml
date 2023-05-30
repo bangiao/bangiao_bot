@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhazha.cqbot.mapper.LogsMapper">
+  <resultMap id="BaseResultMap" type="com.zhazha.cqbot.bean.Logs">
+    <!--@mbg.generated-->
+    <!--@Table "logs"-->
+    <id column="id" jdbcType="LONGVARCHAR" property="id" />
+    <result column="event_type" jdbcType="LONGVARCHAR" property="eventType" />
+    <result column="event_source" jdbcType="LONGVARCHAR" property="eventSource" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, event_type, event_source, description, create_time
+  </sql>
+</mapper>

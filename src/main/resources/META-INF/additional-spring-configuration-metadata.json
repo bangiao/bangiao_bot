@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "feign.customer.url",
+      "type": "java.lang.String",
+      "description": "open feign 默认的 url 地址."
+    }
+  ]
+}
