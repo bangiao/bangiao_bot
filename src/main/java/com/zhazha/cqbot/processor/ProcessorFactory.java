@@ -14,7 +14,7 @@ public class ProcessorFactory {
 	@Resource
 	private PrivateProcessor privateProcessor;
 	
-	public void load(Map<String, Object> maps) {
+	public String load(Map<String, Object> maps) {
 //		message, message_sent, request, notice, meta_event
 		String post_type = (String) maps.get("post_type");
 		if (StrUtil.isBlank(post_type)) {
@@ -23,7 +23,7 @@ public class ProcessorFactory {
 		switch (post_type) {
 			case "meta_event": {
 				// 这种类型的消息不用处理
-				return;
+				return null;
 			}
 			case "message": {
 				MessageVO messageVO = BeanUtil.copyProperties(maps,
@@ -34,10 +34,16 @@ public class ProcessorFactory {
 					privateProcessor.runner(messageVO);
 				} else {
 					// 群消息
-					System.err.println(messageVO);
+					// normal、anonymous、notice
+					switch (messageVO.getSub_type()) {
+						case "normal": {
+						
+						}
+					}
 				}
 			}
 			// TODO: 2023/5/30 后续还有很多别事件类型
 		}
+		return null;
 	}
 }

@@ -37,6 +37,15 @@ public class MessageVO implements Serializable {
 	private Object[] message;
 	private Long message_seq;
 	private String raw_message;
+	private AnonymousBean anonymous;
+	
+	@JsonIgnoreProperties(ignoreUnknown = true)
+	@Data
+	public static class AnonymousBean {
+		private Long id; // 匿名用户
+		private String name; // 匿名用户名称
+		private String flag; // 匿名用户 flag 用于禁言 API 是需要传入
+	}
 	
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	@Data

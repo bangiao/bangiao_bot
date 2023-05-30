@@ -1,5 +1,6 @@
 package com.zhazha.cqbot.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.zhazha.cqbot.processor.ProcessorFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,12 @@ public class EventController {
 
 
 	@RequestMapping("")
-	public void post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
-		test(maps, response);
-		processorFactory.load(maps);
-		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+	public String post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
+		String ret = processorFactory.load(maps);
+		if (StrUtil.isBlank(ret)) {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		}
+		return ret;
 	}
 	
 	private void test(Map<String, Object> maps, HttpServletResponse response) {

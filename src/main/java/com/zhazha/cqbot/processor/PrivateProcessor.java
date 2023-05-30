@@ -43,13 +43,13 @@ public class PrivateProcessor {
 			TaskUtils.addTask(new AdminPriorityTask(() -> {
 				execute(vo);
 			}));
-			throw new NotifyException(vo.getUser_id(), vo.getGroup_id(), "您是尊贵的管理员用户: 您的问题是: " + vo.getRaw_message() + ", 已为您优先安排任务");
+			throw new NotifyException(vo.getUser_id(), vo.getGroup_id(), "您是尊贵的管理员用户: 您的问题是: " + vo.getRaw_message() + " 已为您优先安排任务");
 		}
 		if (StrUtil.equalsIgnoreCase(opt.get().getType(), UserType.USER.name())) {
 			TaskUtils.addTask(new UserPriorityTask(() -> {
 				execute(vo);
 			}));
-			throw new NotifyException(vo.getUser_id(), vo.getGroup_id(), "您是普通用户: 您的问题是: " + vo.getRaw_message() + ", 已为您安排任务");
+			throw new NotifyException(vo.getUser_id(), vo.getGroup_id(), "您是普通用户: 您的问题是: " + vo.getRaw_message() + " 已为您安排任务");
 		}
 	}
 	
