@@ -37,15 +37,15 @@ public class AtGroupMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public void doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public String doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
 			chain.doChain(vo, chain);
-			return;
+			return null;
 		}
 		MessageVO messageVO = (MessageVO) vo;
 		if (null == messageVO) {
 			chain.doChain(vo, chain);
-			return;
+			return null;
 		}
 		
 		List<String> at = CQCodeUtils.getAt(messageVO.getRaw_message());
@@ -57,5 +57,6 @@ public class AtGroupMessageFilter implements MessageFilter {
 		rMessageService.sendGroupMsg(((MessageVO) vo).getGroup_id(),
 				cqBuilder.toString(), true);
 		chain.doChain(vo, chain);
+		return response;
 	}
 }

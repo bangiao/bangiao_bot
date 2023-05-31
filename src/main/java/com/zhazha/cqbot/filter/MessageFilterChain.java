@@ -28,18 +28,18 @@ public class MessageFilterChain {
 		this.filters.add(messageFilter);
 	}
 	
-	public void doChain(BaseVO vo, MessageFilterChain chain) throws Exception, NotifyException {
+	public String doChain(BaseVO vo, MessageFilterChain chain) throws Exception, NotifyException {
 		if (CollUtil.isEmpty(this.filters)) {
-			return;
+			return null;
 		}
 		if (this.filters.size() <= this.pos) {
-			return;
+			return null;
 		}
 		MessageFilter filter = this.filters.get(this.pos++);
 		if (filter == null) {
-			return;
+			return null;
 		}
-		filter.doFilter(vo, chain);
+		return filter.doFilter(vo, chain);
 	}
 	
 }
