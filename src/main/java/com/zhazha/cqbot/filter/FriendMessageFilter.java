@@ -23,7 +23,10 @@ public class FriendMessageFilter implements MessageFilter {
 	public Boolean match(BaseVO vo) {
 		try {
 			MessageVO messageVO = (MessageVO) vo;
-			return StrUtil.equalsIgnoreCase(messageVO.getMessage_type(), "private");
+			String raw_message = messageVO.getRaw_message();
+			if (StrUtil.startWithIgnoreCase(raw_message, "## ")) {
+				return true;
+			}
 		} catch (Exception ignored) {
 		}
 		return false;

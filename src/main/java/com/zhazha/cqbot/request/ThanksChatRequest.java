@@ -51,13 +51,12 @@ public class ThanksChatRequest implements ChatRequest {
 				.init();
 		
 		
-//		Message system = Message.ofSystem("Let's think step by step");
+		Message system = Message.ofSystem("Let's think step by step");
 		Message message = Message.of(question);
 		
 		ChatCompletion chatCompletion = ChatCompletion.builder()
 				.model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-//				.messages(Arrays.asList(system, message))
-				.messages(Arrays.asList(message))
+				.messages(Arrays.asList(message, system))
 				.maxTokens(3000)
 				.temperature(0.9)
 				.build();

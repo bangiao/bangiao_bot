@@ -1,10 +1,13 @@
 package com.zhazha.cqbot.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class TaskUtils {
 	
 	private static final BlockingQueue<Runnable> workQueue = new PriorityBlockingQueue<>(1024);
@@ -13,8 +16,12 @@ public class TaskUtils {
 			3, TimeUnit.SECONDS, workQueue,
 			new ThreadPoolExecutor.DiscardOldestPolicy());
 	
-	public static void addTask(Runnable task) {
-		executor.execute(task);
+	public void addTask(Runnable task) {
+		try {
+			executor.execute(task);
+		} catch (Exception e) {
+			System.err.println("出现异常了");
+		}
 	}
 	
 }

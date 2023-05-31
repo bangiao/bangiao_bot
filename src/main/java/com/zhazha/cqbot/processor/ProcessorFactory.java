@@ -41,7 +41,11 @@ public class ProcessorFactory {
 					// normal、anonymous、notice
 					switch (messageVO.getSub_type()) {
 						case "normal": {
-						
+						System.err.println("1");
+						}
+						case "anonymous": {
+							// 执行严格的文字审批
+							System.err.println("2");
 						}
 					}
 				}
