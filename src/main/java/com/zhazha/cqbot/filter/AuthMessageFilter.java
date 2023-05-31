@@ -34,7 +34,7 @@ public class AuthMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public void doFilter(BaseVO vo, MessageFilterChain chain) {
+	public void doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
 			chain.doChain(vo,chain);
 			return;

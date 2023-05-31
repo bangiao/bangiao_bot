@@ -27,7 +27,7 @@ public class MessageFilterChain {
 		this.filters.add(messageFilter);
 	}
 	
-	public void doChain(BaseVO vo, MessageFilterChain chain) {
+	public void doChain(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (CollUtil.isEmpty(this.filters)) {
 			return;
 		}
