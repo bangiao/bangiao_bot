@@ -10,6 +10,7 @@ import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.BlockException;
 import com.zhazha.cqbot.exception.NotifyException;
 import com.zhazha.cqbot.service.UserService;
+import kotlin.Pair;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,7 +27,7 @@ public class UserFilter implements MessageFilter {
     private final String CMD_USER_BLK = CMD_USER + "block ";
     private final String CMD_USER_DEL = CMD_USER + "delete ";
     private final String CMD_USER_GET = CMD_USER + "get ";
-    private final String CMD_USER_LIST = CMD_USER + "list ";
+    private final String CMD_USER_LIST = CMD_USER + "list";
     
     @Override
     public Boolean match(BaseVO vo) {
@@ -49,6 +50,9 @@ public class UserFilter implements MessageFilter {
         
         Long userId = messageVO.getUser_id();
         User byId = userService.getById(userId);
+        if (null == byId) {
+            throw new NotifyException("你没有权限");
+        }
         if (!StrUtil.equalsIgnoreCase(byId.getType(), UserType.ADMIN.name())
                 && !StrUtil.equalsIgnoreCase(userId.toString(), Constants.adminQQ)) {
             throw new NotifyException("你没有权限");
@@ -85,8 +89,9 @@ public class UserFilter implements MessageFilter {
             String qq = raw_message.replaceFirst(CMD_USER_GET, "").trim();
             User user = userService.getById(qq);
             if (user == null) {
-            
+                return ReplyVO.builder().reply("没有数据").build();
             }
+            
             return ReplyVO.builder()
                     .auto_escape(true)
                     .reply("读取成功: " + user.toString())
@@ -108,7 +113,7 @@ public class UserFilter implements MessageFilter {
             List<User> list = userService.list();
             return ReplyVO.builder()
                     .auto_escape(true)
-                    .reply(Arrays.toString(list.stream().map(User::getQq).toArray()))
+                    .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType())).toArray()))
                     .at_sender(true)
                     .build();
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_DEL)) {

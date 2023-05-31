@@ -17,7 +17,7 @@ public class DispatchFactory {
 	@Resource
 	private GroupDispatcher groupDispatcher;
 	
-	public ReplyVO dispatch(Map<String, Object> maps) {
+	public ReplyVO dispatch(Map<String, Object> maps) throws Exception {
 //		message, message_sent, request, notice, meta_event
 		String post_type = (String) maps.get("post_type");
 		if (StrUtil.isBlank(post_type)) {

@@ -40,6 +40,18 @@ public class ExceptionControllerAdvice {
 		return JSONUtil.toJsonStr(replyVO);
 	}
 	
+	@ExceptionHandler(value = ChatException.class)
+	public String exception(ChatException e) {
+		if (log.isInfoEnabled()) {
+			log.error("chatgpt:", e);
+		}
+		ReplyVO replyVO = ReplyVO.builder()
+				.reply("chatgpt警告: " + e.getMessage() + " [CQ:face,id=6] ")
+				.at_sender(true)
+				.build();
+		return JSONUtil.toJsonStr(replyVO);
+	}
+	
 	@ExceptionHandler(value = RuntimeException.class)
 	public String exception(RuntimeException e) {
 		if (log.isInfoEnabled()) {
@@ -48,7 +60,7 @@ public class ExceptionControllerAdvice {
 		log.error("我废了, 快通知我主人抢救我~~~");
 		EmailUtils.exceptionSendEmail("糟糕, 出现异常了", e.getMessage());
 		ReplyVO replyVO = ReplyVO.builder()
-				.reply("我废了, 快通知我主人抢救我~~~[CQ:face,id=9] ")
+				.reply("我摔倒了, 快通知我主人来扶我~~~[CQ:face,id=9] ")
 				.build();
 		return JSONUtil.toJsonStr(replyVO);
 	}

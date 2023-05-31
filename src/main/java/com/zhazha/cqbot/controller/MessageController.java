@@ -18,7 +18,7 @@ public class MessageController {
 	private DispatchFactory dispatchFactory;
 	
 	@RequestMapping("")
-	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
+	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) throws Exception {
 		ReplyVO vo = dispatchFactory.dispatch(maps);
 		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);

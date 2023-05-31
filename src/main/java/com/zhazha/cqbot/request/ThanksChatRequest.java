@@ -26,7 +26,7 @@ public class ThanksChatRequest implements ChatRequest {
 	private ConfigService configService;
 	
 	@Override
-	public String request(Long qq, String question) {
+	public String request(Long qq, String question) throws ChatException {
 		String url = "https://api.chatanywhere.com.cn";
 		Optional<Config> opt = configService.lambdaQuery()
 				.eq(Config::getName, url)
@@ -34,7 +34,8 @@ public class ThanksChatRequest implements ChatRequest {
 				.oneOpt();
 		
 		if (opt.isEmpty()) {
-			throw new ChatException("chatgpt测试节点 apiKey 不存在, 请到 github 上的 chatanywhere/GPT_API_free 仓库中申请");
+			throw new ChatException("chatgpt测试节点 apiKey 不存在, 请到 github 上的 chatanywhere/GPT_API_free 仓库中申请 " +
+					"然后添加该属于你自己的 api 哦");
 		}
 		
 		Config config = opt.get();
