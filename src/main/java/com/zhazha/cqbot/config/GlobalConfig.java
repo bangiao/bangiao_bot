@@ -10,7 +10,7 @@ public class GlobalConfig {
 	@Bean
 	public SensitiveWordBs sensitiveWordBs() {
 	    return SensitiveWordBs.newInstance()
-			    .wordDeny(new MyWordDeny())
+//			    .wordDeny(new MyWordDeny())
 			    .ignoreRepeat(false)
 			    .init();
 	}

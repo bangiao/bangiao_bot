@@ -35,12 +35,11 @@ public class FriendMessageFilter implements MessageFilter {
 	@Override
 	public String doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
-			chain.doChain(vo, chain);
-			return null;
+			return chain.doChain(vo, chain);
 		}
 		MessageVO messageVO = (MessageVO) vo;
 		String response = chatExecutor.execute(messageVO);
-		rMessageService.sendMessage(messageVO.getSender().getUser_id(), messageVO.getGroup_id(),
+		rMessageService.sendMessage(messageVO.getSender().getUser_id(),
 				response, false);
 		return response;
 	}

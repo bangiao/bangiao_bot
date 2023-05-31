@@ -21,8 +21,8 @@ public interface RMessageService {
 	 * @return
 	 */
 	@GetMapping(value = "/send_private_msg")
-	SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam(required = false) Long group_id,
-	                          @RequestParam String message, @RequestParam(required = false, defaultValue = "true") Boolean auto_escape);
+	SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam String message,
+							  @RequestParam(required = false, defaultValue = "true") Boolean auto_escape);
 	
 	/**
 	 * 发送群消息

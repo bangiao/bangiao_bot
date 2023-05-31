@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RMessageServiceFallback implements RMessageService {
 	
 	@Override
-	public SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam Long group_id, @RequestParam String message, @RequestParam Boolean auto_escape) {
+	public SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam String message, @RequestParam Boolean auto_escape) {
 		String content = "消息发送失败: " + message;
 		log.error(content);
 		EmailUtils.exceptionSendEmail("消息", content);
