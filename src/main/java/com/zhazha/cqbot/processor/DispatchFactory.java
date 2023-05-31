@@ -9,12 +9,14 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Component
-public class ProcessorFactory {
+public class DispatchFactory {
 	
 	@Resource
-	private PrivateProcessor privateProcessor;
+	private FriendDispatcher friendDispatcher;
+	@Resource
+	private GroupDispatcher groupDispatcher;
 	
-	public String load(Map<String, Object> maps) {
+	public void load(Map<String, Object> maps) {
 //		message, message_sent, request, notice, meta_event
 		String post_type = (String) maps.get("post_type");
 		if (StrUtil.isBlank(post_type)) {
@@ -23,7 +25,7 @@ public class ProcessorFactory {
 		switch (post_type) {
 			case "meta_event": {
 				// 这种类型的消息不用处理
-				return null;
+				return;
 			}
 			case "message": {
 				MessageVO messageVO = BeanUtil.copyProperties(maps,
@@ -31,27 +33,16 @@ public class ProcessorFactory {
 				String message_type = messageVO.getMessage_type();
 				if (StrUtil.isBlank(message_type)) {
 					// 这个分支几乎不存在
-					return null;
+					return;
 				}
 				if (StrUtil.equalsIgnoreCase(message_type, "private")) {
 					// 好友消息或者群里私聊你的消息
-					privateProcessor.runner(messageVO);
+					friendDispatcher.runner(messageVO);
 				} else {
-					// 群消息
-					// normal、anonymous、notice
-					switch (messageVO.getSub_type()) {
-						case "normal": {
-						System.err.println("1");
-						}
-						case "anonymous": {
-							// 执行严格的文字审批
-							System.err.println("2");
-						}
-					}
+					groupDispatcher.runner(messageVO);
 				}
 			}
 			// TODO: 2023/5/30 后续还有很多别事件类型
 		}
-		return null;
 	}
 }

@@ -1,7 +1,7 @@
 package com.zhazha.cqbot.controller;
 
 import cn.hutool.json.JSONUtil;
-import com.zhazha.cqbot.processor.ProcessorFactory;
+import com.zhazha.cqbot.processor.DispatchFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +13,12 @@ import java.util.Map;
 public class EventController {
 	
 	@Resource
-	private ProcessorFactory processorFactory;
+	private DispatchFactory dispatchFactory;
 	
 	@RequestMapping("")
-	public String post(@RequestBody Map<String, Object> maps) {
-		processorFactory.load(maps);
+	public void post(@RequestBody Map<String, Object> maps) {
+		dispatchFactory.load(maps);
 		test(maps);
-		return "";
 	}
 	
 	private void test(Map<String, Object> maps) {

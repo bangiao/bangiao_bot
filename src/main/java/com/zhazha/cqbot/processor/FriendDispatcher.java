@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Component
-public class PrivateProcessor {
+public class FriendDispatcher {
 	
 	@Resource
 	private UserService userService;

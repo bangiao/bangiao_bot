@@ -2,6 +2,7 @@ package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
+import com.zhazha.cqbot.exception.NotifyException;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class MessageFilterChain {
 		this.filters.add(messageFilter);
 	}
 	
-	public void doChain(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public void doChain(BaseVO vo, MessageFilterChain chain) throws Exception, NotifyException {
 		if (CollUtil.isEmpty(this.filters)) {
 			return;
 		}
