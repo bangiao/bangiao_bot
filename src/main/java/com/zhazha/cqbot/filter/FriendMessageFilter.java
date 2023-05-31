@@ -3,6 +3,7 @@ package com.zhazha.cqbot.filter;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.runner.ChatExecutor;
 import com.zhazha.cqbot.utils.SendMessageUtils;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class FriendMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public String doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
 			return chain.doChain(vo, chain);
 		}
@@ -41,6 +42,6 @@ public class FriendMessageFilter implements MessageFilter {
 		String response = chatExecutor.execute(messageVO);
 		sendMessageUtils.sendMessage(messageVO.getSender().getUser_id(),
 				response, false);
-		return response;
+		return ReplyVO.builder().reply(response).at_sender(true).auto_escape(false).build();
 	}
 }

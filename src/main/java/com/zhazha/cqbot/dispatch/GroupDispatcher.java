@@ -2,6 +2,7 @@ package com.zhazha.cqbot.dispatch;
 
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -12,7 +13,7 @@ public class GroupDispatcher {
 	@Resource
 	private SensitiveWordBs sensitiveWordBs;
 	
-	public String dispatch(MessageVO messageVO) {
+	public ReplyVO dispatch(MessageVO messageVO) {
 		// TODO: 2023/5/31
 		MessageVO.SenderBean sender = messageVO.getSender();
 		String raw_message = messageVO.getRaw_message();

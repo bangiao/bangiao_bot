@@ -3,6 +3,7 @@ package com.zhazha.cqbot.filter;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.runner.ChatExecutor;
 import com.zhazha.cqbot.utils.CQCodeUtils;
 import com.zhazha.cqbot.utils.SendMessageUtils;
@@ -37,7 +38,7 @@ public class AtGroupMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public String doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
 			chain.doChain(vo, chain);
 			return null;
@@ -57,6 +58,6 @@ public class AtGroupMessageFilter implements MessageFilter {
 		sendMessageUtils.sendGroupMessage(((MessageVO) vo).getGroup_id(),
 				cqBuilder.toString(), true);
 		chain.doChain(vo, chain);
-		return response;
+		return ReplyVO.builder().reply(response).at_sender(true).build();
 	}
 }

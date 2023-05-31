@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.bean.User;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.NotifyException;
 import com.zhazha.cqbot.service.UserService;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class BlockMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public String doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (!match(vo)) {
 			return chain.doChain(vo, chain);
 		}

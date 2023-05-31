@@ -6,6 +6,7 @@ import com.zhazha.cqbot.bean.User;
 import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.constants.UserType;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.BlockException;
 import com.zhazha.cqbot.filter.BlockMessageFilter;
 import com.zhazha.cqbot.filter.FriendMessageFilter;
@@ -31,7 +32,7 @@ public class FriendDispatcher {
     @Resource
     private UserService userService;
     
-    public String dispatch(MessageVO vo) {
+    public ReplyVO dispatch(MessageVO vo) {
         try {
             User one = userService.lambdaQuery().eq(User::getQq, vo.getUser_id())
                     .one();

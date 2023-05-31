@@ -3,6 +3,7 @@ package com.zhazha.cqbot.dispatch;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.controller.vo.MessageVO;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ public class DispatchFactory {
 	@Resource
 	private GroupDispatcher groupDispatcher;
 	
-	public String dispatch(Map<String, Object> maps) {
+	public ReplyVO dispatch(Map<String, Object> maps) {
 //		message, message_sent, request, notice, meta_event
 		String post_type = (String) maps.get("post_type");
 		if (StrUtil.isBlank(post_type)) {

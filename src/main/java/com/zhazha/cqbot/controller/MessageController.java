@@ -1,7 +1,7 @@
 package com.zhazha.cqbot.controller;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.dispatch.DispatchFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +18,14 @@ public class MessageController {
 	private DispatchFactory dispatchFactory;
 	
 	@RequestMapping("")
-	public String post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
-		String ret = dispatchFactory.dispatch(maps);
-		if (StrUtil.isBlank(ret)) {
+	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
+		ReplyVO vo = dispatchFactory.dispatch(maps);
+		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-			return "";
+			return ReplyVO.builder().build();
 		}
 		test(maps);
-		return ret;
+		return vo;
 	}
 	
 	private void test(Map<String, Object> maps) {
