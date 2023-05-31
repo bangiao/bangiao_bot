@@ -1,6 +1,7 @@
 package com.zhazha.cqbot.utils;
 
 import cn.hutool.core.util.StrUtil;
+import com.zhazha.cqbot.remote.msg.RMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 public class SendMessageUtils {
     
     @Resource
-    private SendMessageUtils sendMessageUtils;
+    private RMessageService rMessageService;
     
     public void sendMessage(Long userId, String content, Boolean autoEscape) {
         if (userId == null || StrUtil.isBlank(content)
@@ -19,7 +20,7 @@ public class SendMessageUtils {
             log.error("发送消息时, 参数为空");
             return;
         }
-        sendMessageUtils.sendMessage(userId, content, autoEscape);
+        rMessageService.sendMessage(userId, content, autoEscape);
     }
     
     public void sendGroupMessage(Long groupId, String content, Boolean autoEscape) {
@@ -28,7 +29,7 @@ public class SendMessageUtils {
             log.error("发送消息时, 参数为空");
             return;
         }
-        sendMessageUtils.sendGroupMessage(groupId, content, autoEscape);
+        rMessageService.sendGroupMsg(groupId, content, autoEscape);
     }
     
 }
