@@ -11,8 +11,8 @@ import com.zhazha.cqbot.filter.BlockMessageFilter;
 import com.zhazha.cqbot.filter.FriendMessageFilter;
 import com.zhazha.cqbot.filter.MessageFilterChain;
 import com.zhazha.cqbot.filter.UserFilter;
-import com.zhazha.cqbot.remote.msg.RMessageService;
 import com.zhazha.cqbot.service.UserService;
+import com.zhazha.cqbot.utils.SendMessageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -27,7 +27,7 @@ public class FriendDispatcher {
     @Resource
     private BlockMessageFilter blockMessageFilter;
     @Resource
-    private RMessageService rMessageService;
+    private SendMessageUtils sendMessageUtils;
     @Resource
     private UserService userService;
     
@@ -48,7 +48,7 @@ public class FriendDispatcher {
             return messageFilterChain.doChain(vo, messageFilterChain);
         } catch (Exception e) {
             e.printStackTrace();
-            rMessageService.sendMessage(Long.valueOf(Constants.adminQQ), String.valueOf(e.getStackTrace()[0]), true);
+            sendMessageUtils.sendMessage(Long.valueOf(Constants.adminQQ), String.valueOf(e.getStackTrace()[0]), true);
         }
         return null;
     }

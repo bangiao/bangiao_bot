@@ -3,9 +3,9 @@ package com.zhazha.cqbot.filter;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
-import com.zhazha.cqbot.remote.msg.RMessageService;
 import com.zhazha.cqbot.runner.ChatExecutor;
 import com.zhazha.cqbot.utils.CQCodeUtils;
+import com.zhazha.cqbot.utils.SendMessageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -21,7 +21,7 @@ public class AtGroupMessageFilter implements MessageFilter {
 	private ChatExecutor chatExecutor;
 	
 	@Resource
-	private RMessageService rMessageService;
+	private SendMessageUtils sendMessageUtils;
 	
 	@Override
 	public Boolean match(BaseVO vo) {
@@ -54,7 +54,7 @@ public class AtGroupMessageFilter implements MessageFilter {
 		StringBuilder cqBuilder = new StringBuilder();
 		at.forEach(qq -> cqBuilder.append("[CQ:at,qq=").append(qq).append("] "));
 		cqBuilder.append(response);
-		rMessageService.sendGroupMsg(((MessageVO) vo).getGroup_id(),
+		sendMessageUtils.sendGroupMessage(((MessageVO) vo).getGroup_id(),
 				cqBuilder.toString(), true);
 		chain.doChain(vo, chain);
 		return response;

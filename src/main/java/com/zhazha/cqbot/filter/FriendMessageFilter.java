@@ -3,8 +3,8 @@ package com.zhazha.cqbot.filter;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
-import com.zhazha.cqbot.remote.msg.RMessageService;
 import com.zhazha.cqbot.runner.ChatExecutor;
+import com.zhazha.cqbot.utils.SendMessageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ public class FriendMessageFilter implements MessageFilter {
 	@Resource
 	private ChatExecutor chatExecutor;
 	@Resource
-	private RMessageService rMessageService;
+	private SendMessageUtils sendMessageUtils;
 	
 	@Override
 	public Boolean match(BaseVO vo) {
@@ -39,7 +39,7 @@ public class FriendMessageFilter implements MessageFilter {
 		}
 		MessageVO messageVO = (MessageVO) vo;
 		String response = chatExecutor.execute(messageVO);
-		rMessageService.sendMessage(messageVO.getSender().getUser_id(),
+		sendMessageUtils.sendMessage(messageVO.getSender().getUser_id(),
 				response, false);
 		return response;
 	}
