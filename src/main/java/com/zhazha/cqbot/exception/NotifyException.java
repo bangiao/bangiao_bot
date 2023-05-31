@@ -2,8 +2,12 @@ package com.zhazha.cqbot.exception;
 
 public class NotifyException extends RuntimeException {
 	
-	private final Long user_id;
-	private final Long group_id;
+	private Long user_id;
+	private Long group_id;
+	
+	public NotifyException(String message) {
+		super(message);
+	}
 	
 	public NotifyException(Long user_id, Long group_id, String message) {
 		super(message);

@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 @Slf4j
 @RestControllerAdvice
-public class ExceptionController {
+public class ExceptionControllerAdvice {
 	
 	@Resource
 	private RMessageService rMessageService;
@@ -21,7 +21,11 @@ public class ExceptionController {
 		if (log.isInfoEnabled()) {
 			log.info("通知:", e);
 		}
-		rMessageService.sendMessage(e.getUser_id(), e.getGroup_id(), e.getMessage(), false);
+		if (e.getGroup_id() != null && e.getUser_id() != null) {
+			rMessageService.sendMessage(e.getUser_id(), e.getGroup_id(), e.getMessage(), false);
+		} else if (e.getGroup_id() != null && e.getUser_id() == null) {
+			rMessageService.sendGroupMsg(e.getGroup_id(), e.getMessage(), false);
+		}
 		return "{\"reply\": \"通知: " + e.getMessage() + "[CQ:face,id=12]\"}";
 	}
 	

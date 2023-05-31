@@ -21,6 +21,14 @@ public class RMessageServiceFallback implements RMessageService {
 		return null;
 	}
 	
+	@Override
+	public SendMsgResult sendGroupMsg(@RequestParam Long group_id, @RequestParam String message, @RequestParam Boolean auto_escape) {
+		String content = "消息发送失败: " + message;
+		log.error(content);
+		EmailUtils.exceptionSendEmail("消息", content);
+		return null;
+	}
+	
 	
 	@Override
 	public GetMsgResult getMsg(long message_id) {

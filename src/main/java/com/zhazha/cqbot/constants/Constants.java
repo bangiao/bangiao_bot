@@ -12,5 +12,5 @@ public class Constants {
 	public static final List<String> toEmail = List.of("bangiao@qq.com");
 	public static final String hostName = "smtp.qq.com";
 	public static final int hostPort = 465;
-	
+	public static final String adminQQ = "2033445917";
 }

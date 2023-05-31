@@ -13,6 +13,12 @@ public class ChatExecutor {
 	@Resource
 	private ChatRequest chatRequest;
 	
+	/**
+	 * 返回 chat gpt 结果
+	 *
+	 * @param vo
+	 * @return
+	 */
 	public String execute(MessageVO vo) {
 		String message = vo.getRaw_message();
 		String question = CQCodeUtils.getText(message);

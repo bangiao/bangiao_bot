@@ -14,12 +14,24 @@ public interface RMessageService {
 	/**
 	 * 发送消息
 	 *
-	 * @param msg 这里存在两个对象, {@link SendGroupMsg} 和 {@link SendPrivateMsg}
-	 *            根据这两个对象判断是发送群消息还是私聊
-	 * @return 返回消息 id
+	 * @param user_id
+	 * @param group_id
+	 * @param message
+	 * @param auto_escape 消息内容是否作为纯文本发送 ( 即不解析 CQ 码 ) , 只在 message 字段是字符串时有效
+	 * @return
 	 */
 	@GetMapping(value = "/send_private_msg")
 	SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam Long group_id, @RequestParam String message, @RequestParam Boolean auto_escape);
+	
+	/**
+	 * 发送群消息
+	 * @param group_id
+	 * @param message
+	 * @param auto_escape 消息内容是否作为纯文本发送 ( 即不解析 CQ 码 ) , 只在 message 字段是字符串时有效
+	 * @return
+	 */
+	@GetMapping("/send_group_msg")
+	SendMsgResult sendGroupMsg(@RequestParam Long group_id, @RequestParam String message, @RequestParam Boolean auto_escape);
 	
 	/**
 	 * 根据消息id拿到相关数据

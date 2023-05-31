@@ -2,15 +2,17 @@ package com.zhazha.cqbot.controller.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 /**
  * 私聊消息
  */
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class MessageVO implements Serializable {
+public class MessageVO extends BaseVO implements Serializable {
 //	* time	int64	-	事件发生的时间戳
 //* self_id	int64	-	收到事件的机器人 QQ 号
 //* post_type	string 参考	message	上报类型
@@ -24,17 +26,14 @@ public class MessageVO implements Serializable {
 //* sender	object 参考	-	发送人信息
 //	target_id	int64	-	接收者 QQ 号
 //	temp_source	int	-	临时会话来源
-	private String post_type;
 	private String message_type;
-	private Long time;
-	private Long self_id;
 	private String sub_type;
 	private Long font;
 	private Long group_id;
 	private SenderBean sender;
 	private Long user_id;
 	private Long message_id;
-	private Object[] message;
+	private String message;
 	private Long message_seq;
 	private String raw_message;
 	private AnonymousBean anonymous;

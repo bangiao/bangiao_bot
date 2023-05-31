@@ -29,7 +29,11 @@ public class ProcessorFactory {
 				MessageVO messageVO = BeanUtil.copyProperties(maps,
 						MessageVO.class, "");
 				String message_type = messageVO.getMessage_type();
-				if (StrUtil.isNotBlank(message_type) || StrUtil.equalsIgnoreCase(message_type, "private")) {
+				if (StrUtil.isBlank(message_type)) {
+					// 这个分支几乎不存在
+					return null;
+				}
+				if (StrUtil.equalsIgnoreCase(message_type, "private")) {
 					// 好友消息或者群里私聊你的消息
 					privateProcessor.runner(messageVO);
 				} else {

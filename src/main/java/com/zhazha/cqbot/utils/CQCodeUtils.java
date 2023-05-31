@@ -1,6 +1,7 @@
 package com.zhazha.cqbot.utils;
 
 import cn.hutool.core.util.StrUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,16 @@ import java.util.regex.Pattern;
 
 public class CQCodeUtils {
 	
-	public static String getText(String cqCode) {
+	/**
+	 * 去掉cq表达式
+	 *
+	 * @param cqCode
+	 * @return
+	 */
+	public static @Nullable String getText(String cqCode) {
+		if (StrUtil.isBlank(cqCode)) {
+			return null;
+		}
 		String pattern = "(\\[[^\\]]*\\])|(\\r\\n)|(\\n)";
 		return cqCode.replaceAll(pattern, "");
 	}
@@ -33,7 +43,7 @@ public class CQCodeUtils {
 	
 	/**
 	 * 获得 cq code 中的 at 的所有人
-	 *
+	 * <p>
 	 * 注意, 已经排除了 all 的情况
 	 *
 	 * @param cqCode

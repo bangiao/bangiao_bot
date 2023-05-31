@@ -18,13 +18,25 @@ public class EventController {
 	private ProcessorFactory processorFactory;
 
 
+//	@RequestMapping("")
+//	public String post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
+//		String ret = processorFactory.load(maps);
+//		if (StrUtil.isBlank(ret)) {
+//			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+//		}
+//		return ret;
+//	}
+	
 	@RequestMapping("")
 	public String post(@RequestBody Map<String, Object> maps, HttpServletResponse response) {
 		String ret = processorFactory.load(maps);
 		if (StrUtil.isBlank(ret)) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
+		test(maps, response);
 		return ret;
+//		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+//		return "";
 	}
 	
 	private void test(Map<String, Object> maps, HttpServletResponse response) {
