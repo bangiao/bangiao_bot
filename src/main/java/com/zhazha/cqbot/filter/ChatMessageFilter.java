@@ -1,6 +1,7 @@
 package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.bean.Config;
 import com.zhazha.cqbot.chat.ChatEngine;
@@ -10,6 +11,7 @@ import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.service.ConfigService;
+import com.zhazha.cqbot.utils.ReplyUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +28,10 @@ public class ChatMessageFilter implements MessageFilter {
     
     public static final String CMD_CHAT_ADD = Constants.CMD_CHAT + "add";
     public static final String CMD_CHAT_GET = Constants.CMD_CHAT + "get";
-    public static final String CMD_CHAT_DEL = Constants.CMD_CHAT + "delete";
+    public static final String CMD_CHAT_DEL = Constants.CMD_CHAT + "del";
     public static final String CMD_CHAT_LIST = Constants.CMD_CHAT + "list";
+    public static final String CMD_CHAT_OL = Constants.CMD_CHAT + "#";
+    public static final String CMD_CHAT_HELP = Constants.CMD_CHAT + "help";
     
     @Resource
     private ConfigService configService;
@@ -55,17 +59,34 @@ public class ChatMessageFilter implements MessageFilter {
             return chatGet(userId);
         } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_DEL)) {
             // 只能删除自己的
-            return chatDel(rawMessage);
-        }  else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_LIST)) {
+            return chatDel(userId.toString());
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_LIST)) {
             // 列表
             return chatList(userId.toString(), rawMessage);
-        } else {
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_HELP)) {
+            // 列表
+            return help();
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_OL)) {
+            String msg = rawMessage.replace(CMD_CHAT_OL, "");
+            messageVO.setRaw_message(msg);
             String response = chatEngine.execute(messageVO);
             return ReplyVO.builder()
                     .at_sender(true)
                     .reply(response)
                     .build();
         }
+        return ReplyUtils.build("指令不正确\n");
+    }
+    
+    private ReplyVO help() {
+        return ReplyUtils.build(
+                ChatMessageFilter.CMD_CHAT_OL + "你好, openAI\n" +
+                        ChatMessageFilter.CMD_CHAT_ADD + " 123456789\n"+
+                        ChatMessageFilter.CMD_CHAT_DEL + "\n" +
+                        ChatMessageFilter.CMD_CHAT_GET + "\n" +
+                        ChatMessageFilter.CMD_CHAT_LIST + "\n" +
+                        ChatMessageFilter.CMD_CHAT_HELP
+        );
     }
     
     private ReplyVO chatList(String userId, String rawMessage) {
@@ -98,7 +119,8 @@ public class ChatMessageFilter implements MessageFilter {
         Config config = configService.getById(Constants.adminQQ);
         if (null == config) {
             config = Config.builder()
-                    .name(ConfigType.URL)
+                    .id(IdUtil.getSnowflake().nextIdStr())
+                    .name(ConfigType.CHAT_NAME)
                     .status(0)
                     .type(ConfigType.CHATGPT.name())
                     .value1(ConfigType.URL)
@@ -106,7 +128,6 @@ public class ChatMessageFilter implements MessageFilter {
                     .value3(userId.toString())
                     .build();
         } else {
-            config.setId(null);
             config.setValue3(userId.toString());
             config.setStatus(0);
             config.setValue2(code);
@@ -117,9 +138,9 @@ public class ChatMessageFilter implements MessageFilter {
                 .reply("保存成功").build();
     }
     
-    private ReplyVO chatDel(String rawMessage) {
-        String id = rawMessage.replace(CMD_CHAT_DEL, "").trim();
-        configService.removeById(id);
+    private ReplyVO chatDel(String qq) {
+        // 只能删除自己的chat sdk
+        configService.removeByQQ(qq);
         return ReplyVO.builder()
                 .reply("删除成功")
                 .at_sender(true)

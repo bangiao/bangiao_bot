@@ -7,6 +7,7 @@ import com.zhazha.cqbot.constants.ConfigType;
 import com.zhazha.cqbot.mapper.ConfigMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class ConfigService extends ServiceImpl<ConfigMapper, Config> {
         }
         return lambdaQuery()
                 .eq(Config::getValue3, qq)
-                .eq(Config::getType,ConfigType.CHATGPT)
+                .eq(Config::getType, ConfigType.CHATGPT)
                 .list();
     }
     
@@ -46,7 +47,7 @@ public class ConfigService extends ServiceImpl<ConfigMapper, Config> {
         }
         return lambdaQuery()
                 .eq(Config::getValue3, qq)
-                .eq(Config::getType,ConfigType.CHATGPT)
+                .eq(Config::getType, ConfigType.CHATGPT)
                 .list();
     }
     
@@ -55,7 +56,7 @@ public class ConfigService extends ServiceImpl<ConfigMapper, Config> {
             return null;
         }
         return lambdaQuery()
-                .eq(Config::getType,ConfigType.CHATGPT)
+                .eq(Config::getType, ConfigType.CHATGPT)
                 .list();
     }
     
@@ -66,4 +67,24 @@ public class ConfigService extends ServiceImpl<ConfigMapper, Config> {
                 .one();
     }
     
+    public void removeByQQ(String qq) {
+        if (StrUtil.isBlank(qq)) {
+            return;
+        }
+        lambdaUpdate().eq(Config::getValue3, qq).remove();
+    }
+    
+    public List<Config> listByName(Long name) {
+        if (null == name) {
+            return new ArrayList<>();
+        }
+        return lambdaQuery().eq(Config::getName, name).list();
+    }
+    
+    public List<Config> listByName(String name) {
+        if (StrUtil.isBlank(name)) {
+            return new ArrayList<>();
+        }
+        return lambdaQuery().eq(Config::getName, name).list();
+    }
 }

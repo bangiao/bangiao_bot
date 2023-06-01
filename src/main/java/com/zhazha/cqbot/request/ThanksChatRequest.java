@@ -44,7 +44,7 @@ public class ThanksChatRequest implements ChatRequest {
 //                throw new ChatException("一次只能回答个问题");
                 return "一次只能回答个问题";
             }
-            List<Config> configList = configService.listByQQ(qq);
+            List<Config> configList = configService.listByName(NODE_NAME);
             
             if (CollUtil.isEmpty(configList)) {
                 throw new ChatException("chatgpt测试节点 apiKey 不存在, 请到 github 上的 chatanywhere/GPT_API_free 仓库中申请 " +

@@ -31,7 +31,7 @@ public class EmailUtils {
     
     @SneakyThrows
     public static void exceptionSendEmail(String title, String content) {
-//        sendSimpleEmail(title,content,Constants.toEmail.get(0));
+        sendSimpleEmail(title,content,Constants.toEmail.get(0));
     }
 
     public static void sendAttachmentEmail(String title, String content, File file, String toEmail) throws EmailException {

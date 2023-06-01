@@ -29,6 +29,7 @@ public class UserMessageFilter implements MessageFilter {
     public static final String CMD_USER_DEL = Constants.CMD_USER + "del";
     public static final String CMD_USER_GET = Constants.CMD_USER + "get";
     public static final String CMD_USER_LIST = Constants.CMD_USER + "list";
+    public static final String CMD_USER_HELP = Constants.CMD_USER + "help";
     
     @Override
     public Boolean match(BaseVO vo) {
@@ -72,9 +73,23 @@ public class UserMessageFilter implements MessageFilter {
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_DEL)) {
             // 删除
             return deleteUser(sendUser, raw_message);
+        } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_HELP)) {
+            // 删除
+            return help();
         }
         
         return ReplyUtils.build("指令不正确\n");
+    }
+    
+    private ReplyVO help() {
+        return ReplyUtils.build(
+                UserMessageFilter.CMD_USER_ADD + " qq\n" +
+                        UserMessageFilter.CMD_USER_BLK + " qq\n" +
+                        UserMessageFilter.CMD_USER_DEL + " qq\n" +
+                        UserMessageFilter.CMD_USER_GET + " qq\n" +
+                        UserMessageFilter.CMD_USER_LIST + "\n" +
+                        UserMessageFilter.CMD_USER_HELP
+        );
     }
     
     private ReplyVO deleteUser(User sendUser, String raw_message) {
