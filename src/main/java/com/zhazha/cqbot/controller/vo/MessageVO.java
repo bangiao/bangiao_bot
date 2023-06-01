@@ -31,7 +31,7 @@ public class MessageVO extends BaseVO implements Serializable {
 	private Long font;
 	private Long group_id;
 	private SenderBean sender;
-	private Long user_id;
+	private Long user_id; // 发送者 QQ 号
 	private Long message_id;
 	private String message;
 	private Long message_seq;

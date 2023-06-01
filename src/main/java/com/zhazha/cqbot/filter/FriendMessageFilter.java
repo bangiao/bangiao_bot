@@ -40,8 +40,6 @@ public class FriendMessageFilter implements MessageFilter {
 		}
 		MessageVO messageVO = (MessageVO) vo;
 		String response = chatExecutor.execute(messageVO);
-		sendMessageUtils.sendMessage(messageVO.getSender().getUser_id(),
-				response, false);
 		return ReplyVO.builder().reply(response).at_sender(true).auto_escape(false).build();
 	}
 }

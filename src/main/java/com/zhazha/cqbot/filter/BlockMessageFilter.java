@@ -38,12 +38,6 @@ public class BlockMessageFilter implements MessageFilter {
 		if (blockUser != null) {
 			throw new NotifyException("请求被拦截, 你或者你申请的用户是黑名单");
 		}
-		String raw_message = messageVO.getRaw_message();
-		String qq = StrUtil.replaceFirst(raw_message, USER_REG, "", true).trim();
-		blockUser = userService.getBlockUser(Long.valueOf(qq));
-		if (blockUser != null) {
-			throw new NotifyException("请求被拦截, 你或者你申请的用户是黑名单");
-		}
 		return chain.doChain(vo,chain);
 	}
 }

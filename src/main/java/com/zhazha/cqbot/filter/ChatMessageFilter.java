@@ -51,41 +51,52 @@ public class ChatMessageFilter implements MessageFilter {
         
         if (StrUtil.startWithAnyIgnoreCase(rawMessage, CMD_CHAT_ADD)) {
             // 只能为自己添加 api key
-            String code = rawMessage.replace(CMD_CHAT_ADD, "").trim();
-            Config config = configService.getById(Constants.adminQQ);
-            if (null == config) {
-                config = Config.builder()
-                        .name(URL)
-                        .status(0)
-                        .type("chatgpt")
-                        .value1(URL)
-                        .value2(code)
-                        .value3(userId.toString())
-                        .build();
-            } else {
-                config.setId(null);
-                config.setValue3(userId.toString());
-                config.setStatus(0);
-                config.setValue2(code);
-            }
-            // TODO: 2023/6/1 多个 key 查询出给拿去 chatgpt
-            configService.saveOrUpdate(config);
-            return ReplyVO.builder().reply("保存成功").build();
+            return chatAdd(rawMessage, userId);
         } else if (StrUtil.startWithAnyIgnoreCase(rawMessage, CMD_CHAT_GET)) {
             // 只能看自己的
-            List<Config> configs = configService.listByQQ(userId);
-            String s = configs.stream().map(config ->
-                            Triple.of(config.getId(), config.getValue1(), config.getValue2()))
-                    .toString();
-            return ReplyVO.builder().reply(s).build();
+            return chatGet(userId);
         } else if (StrUtil.startWithAnyIgnoreCase(rawMessage, CMD_CHAT_DEL)) {
             // 只能删除自己的
-            String id = rawMessage.replace(CMD_CHAT_DEL, "").trim();
-            configService.removeById(id);
-            return ReplyVO.builder()
-                    .reply("删除成功")
-                    .build();
+            return chatDel(rawMessage);
         }
         return null;
+    }
+    
+    private ReplyVO chatAdd(String rawMessage, Long userId) {
+        String code = rawMessage.replace(CMD_CHAT_ADD, "").trim();
+        Config config = configService.getById(Constants.adminQQ);
+        if (null == config) {
+            config = Config.builder()
+                    .name(URL)
+                    .status(0)
+                    .type("chatgpt")
+                    .value1(URL)
+                    .value2(code)
+                    .value3(userId.toString())
+                    .build();
+        } else {
+            config.setId(null);
+            config.setValue3(userId.toString());
+            config.setStatus(0);
+            config.setValue2(code);
+        }
+        configService.saveOrUpdate(config);
+        return ReplyVO.builder().reply("保存成功").build();
+    }
+    
+    private ReplyVO chatDel(String rawMessage) {
+        String id = rawMessage.replace(CMD_CHAT_DEL, "").trim();
+        configService.removeById(id);
+        return ReplyVO.builder()
+                .reply("删除成功")
+                .build();
+    }
+    
+    private ReplyVO chatGet(Long userId) {
+        List<Config> configs = configService.listByQQ(userId);
+        String s = configs.stream().map(config ->
+                        Triple.of(config.getId(), config.getValue1(), config.getValue2()))
+                .toString();
+        return ReplyVO.builder().reply(s).build();
     }
 }

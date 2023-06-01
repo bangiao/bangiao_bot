@@ -22,7 +22,7 @@ public class ChatExecutor {
 	public String execute(MessageVO vo) {
 		String message = vo.getRaw_message();
 		String question = CQCodeUtils.getText(message);
-		return chatRequest.request(vo.getSender().getUser_id(), question);
+		return chatRequest.request(vo.getUser_id(), question);
 	}
 	
 }

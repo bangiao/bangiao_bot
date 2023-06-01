@@ -34,8 +34,7 @@ public class FriendDispatcher {
     private UserService userService;
     
     public ReplyVO dispatch(MessageVO vo) throws Exception {
-        User one = userService.lambdaQuery().eq(User::getQq, vo.getUser_id())
-                .one();
+        User one = userService.getUser(vo.getUser_id());
         
         if (one != null) {
             if (StrUtil.equalsIgnoreCase(one.getType(), UserType.BLOCK.name())) {

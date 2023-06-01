@@ -1,5 +1,6 @@
 package com.zhazha.cqbot.request;
 
+import cn.hutool.core.collection.CollUtil;
 import com.plexpt.chatgpt.ChatGPT;
 import com.plexpt.chatgpt.entity.chat.ChatCompletion;
 import com.plexpt.chatgpt.entity.chat.ChatCompletionResponse;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -27,30 +28,27 @@ public class ThanksChatRequest implements ChatRequest {
 	
 	@Override
 	public String request(Long qq, String question) throws ChatException {
-		String url = "https://api.chatanywhere.com.cn";
-		Optional<Config> opt = configService.lambdaQuery()
-				.eq(Config::getName, url)
-				.eq(Config::getValue3, qq.toString())
-				.oneOpt();
+		List<Config> configList = configService.listByQQ(qq);
 		
-		if (opt.isEmpty()) {
+		if (CollUtil.isEmpty(configList)) {
 			throw new ChatException("chatgpt测试节点 apiKey 不存在, 请到 github 上的 chatanywhere/GPT_API_free 仓库中申请 " +
 					"然后添加该属于你自己的 api 哦");
 		}
 		
-		Config config = opt.get();
+		String host = configList.get(0).getValue1();
+		
+		List<String> apiKeyList = configList.stream().map(Config::getValue2).collect(Collectors.toList());
 		
 		//国内需要代理 国外不需要
 //		Proxy proxy = Proxys.http("127.0.0.1", 1080);
 		
 		ChatGPT chatGPT = ChatGPT.builder()
 				.timeout(1800)
-				.apiKey(config.getValue2())
+				.apiKeyList(apiKeyList)
 //				.proxy(proxy)
-				.apiHost(config.getValue1())
+				.apiHost(host)
 				.build()
 				.init();
-		
 		
 		Message system = Message.ofSystem("Let's think step by step");
 		Message message = Message.of(question);
@@ -62,6 +60,7 @@ public class ThanksChatRequest implements ChatRequest {
 				.temperature(0.9)
 				.build();
 		ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
+		
 		return response.getChoices().stream()
 				.map(chatChoice -> chatChoice.getMessage().getContent())
 				.collect(Collectors.joining());

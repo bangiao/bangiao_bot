@@ -49,7 +49,7 @@ public class UserFilter implements MessageFilter {
         MessageVO messageVO = (MessageVO) vo;
         
         Long userId = messageVO.getUser_id();
-        User byId = userService.getById(userId);
+        User byId = userService.getUser(userId);
         if (null == byId) {
             throw new NotifyException("你没有权限");
         }
@@ -62,78 +62,107 @@ public class UserFilter implements MessageFilter {
         
         if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_REG)) {
             // 用户注册
-            
-            // 1. 检查用户是否已经存在
-            // 2. 注册
-            String qq = raw_message.replace(CMD_USER_REG, "").trim();
-            User one = userService.getById(Long.valueOf(qq));
-            if (one != null) {
-                if (StrUtil.equalsIgnoreCase(one.getType(), UserType.BLOCK.name())) {
-                    throw new BlockException("您是黑名单用户, 请联系管理员!!!");
-                }
-                throw new NotifyException("该用户已注册");
-            }
-            User user = User.builder()
-                    .type(UserType.USER.name())
-                    .createQq(userId.toString())
-                    .qq(qq)
-                    .build();
-            userService.saveOrUpdate(user);
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply("注册成功")
-                    .at_sender(true)
-                    .build();
+            return registerUser(userId, raw_message);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_GET)) {
             // 读取
-            String qq = raw_message.replaceFirst(CMD_USER_GET, "").trim();
-            User user = userService.getById(qq);
-            if (user == null) {
-                return ReplyVO.builder().reply("没有数据").build();
-            }
-            
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply("读取成功: " + user.toString())
-                    .at_sender(true)
-                    .build();
+            return getUser(raw_message);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_BLK)) {
             // 拉黑
-            String qq = raw_message.replaceFirst(CMD_USER_BLK, "").trim();
-            User user = userService.getById(qq);
-            user.setType(UserType.BLOCK.name());
-            userService.saveOrUpdate(user);
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply("拉黑成功")
-                    .at_sender(true)
-                    .build();
+            return blockUser(messageVO);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_LIST)) {
             // 列出授权列表
-            List<User> list = userService.list();
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType())).toArray()))
-                    .at_sender(true)
-                    .build();
+            return listUser();
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_DEL)) {
             // 删除
-            String qq = raw_message.replaceFirst(CMD_USER_DEL, "").trim();
-            userService.removeById(qq);
+            return deleteUser(raw_message);
+        }
+        return null;
+    }
+    
+    private ReplyVO deleteUser(String raw_message) {
+        String qq = raw_message.replaceFirst(CMD_USER_DEL, "").trim();
+        if (StrUtil.isBlank(qq)) {
             return ReplyVO.builder()
                     .auto_escape(true)
-                    .reply("删除成功")
+                    .reply("没有该用户")
                     .at_sender(true)
                     .build();
         }
-        
-        return null;
+        userService.removeById(qq);
+        return ReplyVO.builder()
+                .auto_escape(true)
+                .reply("删除成功")
+                .at_sender(true)
+                .build();
+    }
+    
+    private ReplyVO listUser() {
+        List<User> list = userService.list();
+        return ReplyVO.builder()
+                .auto_escape(true)
+                .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType())).toArray()))
+                .at_sender(true)
+                .build();
+    }
+    
+    private ReplyVO getUser(String raw_message) {
+        String qq = raw_message.replaceFirst(CMD_USER_GET, "").trim();
+        User user = userService.getUser(qq);
+        if (user == null) {
+            return ReplyVO.builder().reply("没有数据").build();
+        }
+        return ReplyVO.builder()
+                .auto_escape(true)
+                .reply("读取成功: " + user)
+                .at_sender(true)
+                .build();
+    }
+    
+    private ReplyVO blockUser(MessageVO messageVO) {
+        String rawMessage = messageVO.getRaw_message();
+        String qq = rawMessage.replaceFirst(CMD_USER_BLK, "").trim();
+        User user = userService.getUser(qq);
+        if (null == user) {
+            user = User.builder().qq(qq)
+                    .createQq(messageVO.getUser_id().toString())
+                    .build();
+        }
+        user.setType(UserType.BLOCK.name());
+        userService.saveOrUpdate(user);
+        return ReplyVO.builder()
+                .auto_escape(true)
+                .reply("拉黑成功")
+                .at_sender(true)
+                .build();
+    }
+    
+    private ReplyVO registerUser(Long userId, String raw_message) {
+        // 1. 检查用户是否已经存在
+        // 2. 注册
+        String qq = raw_message.replace(CMD_USER_REG, "").trim();
+        User one = userService.getUser(qq);
+        if (one != null) {
+            if (StrUtil.equalsIgnoreCase(one.getType(), UserType.BLOCK.name())) {
+                throw new BlockException("您是黑名单用户, 请联系管理员!!!");
+            }
+            throw new NotifyException("该用户已注册");
+        }
+        User user = User.builder()
+                .type(UserType.USER.name())
+                .createQq(userId.toString())
+                .qq(qq)
+                .build();
+        userService.saveOrUpdate(user);
+        return ReplyVO.builder()
+                .auto_escape(true)
+                .reply("注册成功")
+                .at_sender(true)
+                .build();
     }
     
     // register user 2222222222
     private void register(String senderId, String qq, String type) {
-        User one = userService.lambdaQuery().eq(User::getQq, qq)
-                .one();
+        User one = userService.getByQQ(qq);
         if (null == one) {
             User user = User.builder()
                     .qq(qq)
