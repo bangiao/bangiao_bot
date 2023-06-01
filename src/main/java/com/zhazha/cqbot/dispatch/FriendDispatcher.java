@@ -12,7 +12,6 @@ import com.zhazha.cqbot.filter.FriendMessageFilter;
 import com.zhazha.cqbot.filter.MessageFilterChain;
 import com.zhazha.cqbot.filter.UserFilter;
 import com.zhazha.cqbot.service.UserService;
-import com.zhazha.cqbot.utils.SendMessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +27,6 @@ public class FriendDispatcher {
     private UserFilter userFilter;
     @Resource
     private BlockMessageFilter blockMessageFilter;
-    @Resource
-    private SendMessageUtils sendMessageUtils;
     @Resource
     private UserService userService;
     

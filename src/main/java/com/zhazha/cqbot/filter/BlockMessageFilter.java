@@ -7,23 +7,28 @@ import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.NotifyException;
 import com.zhazha.cqbot.service.UserService;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
 
-@Component
 public class BlockMessageFilter implements MessageFilter {
 	
 	@Resource
 	private UserService userService;
-	private final String USER = "#user ";
-	private final String USER_REG = USER + "register ";
+	private final Set<String> urls = new HashSet<>();
+	
+	public void addUrl(String url) {
+		this.urls.add(url);
+	}
 	
 	@Override
 	public Boolean match(BaseVO vo) {
 		MessageVO messageVO = (MessageVO) vo;
-		if (StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), USER_REG)) {
-			return true;
+		for (String url : urls) {
+			if (StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), url)) {
+				return true;
+			}
 		}
 		return false;
 	}
