@@ -22,19 +22,18 @@ public class UserFilter implements MessageFilter {
     
     @Resource
     private UserService userService;
-    private final String CMD_USER = "#user ";
-    private final String CMD_USER_REG = CMD_USER + "register ";
-    private final String CMD_USER_BLK = CMD_USER + "block ";
-    private final String CMD_USER_DEL = CMD_USER + "delete ";
-    private final String CMD_USER_GET = CMD_USER + "get ";
-    private final String CMD_USER_LIST = CMD_USER + "list";
+    private static final String CMD_USER_REG = Constants.CMD_USER + "register ";
+    private static final String CMD_USER_BLK = Constants.CMD_USER + "block ";
+    private static final String CMD_USER_DEL = Constants.CMD_USER + "delete ";
+    private static final String CMD_USER_GET = Constants.CMD_USER + "get ";
+    private static final String CMD_USER_LIST = Constants.CMD_USER + "list";
     
     @Override
     public Boolean match(BaseVO vo) {
         try {
             MessageVO messageVO = (MessageVO) vo;
             String raw_message = messageVO.getRaw_message();
-            return StrUtil.startWithIgnoreCase(raw_message, CMD_USER);
+            return StrUtil.startWithIgnoreCase(raw_message, Constants.CMD_USER);
         } catch (Exception ignored) {
         }
         return false;
@@ -42,10 +41,6 @@ public class UserFilter implements MessageFilter {
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
-        if (!match(vo)) {
-            return chain.doChain(vo, chain);
-        }
-        
         MessageVO messageVO = (MessageVO) vo;
         
         Long userId = messageVO.getUser_id();

@@ -1,7 +1,7 @@
 package com.zhazha.cqbot.filter;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
@@ -13,7 +13,8 @@ import javax.annotation.Resource;
 import java.util.Set;
 
 /**
- * 进入这里的请求, 默认就是群消息
+ * 是不是 at 机器人?
+ * 有没有权限?
  */
 @Component
 public class AtGroupMessageFilter implements MessageFilter {
@@ -31,19 +32,14 @@ public class AtGroupMessageFilter implements MessageFilter {
 			return false;
 		}
 		String raw_message = messageVO.getRaw_message();
-		Set<String> at = CQCodeUtils.getAt(raw_message);
-		return CollUtil.isNotEmpty(at);
+		return StrUtil.containsIgnoreCase(raw_message, Constants.AT_BOT);
 	}
 	
 	@Override
 	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
-		if (!match(vo)) {
-			chain.doChain(vo, chain);
-			return null;
-		}
 		MessageVO messageVO = (MessageVO) vo;
 		
-		Set<String> at = CQCodeUtils.getAt(messageVO.getRaw_message());
+		Set<String> at = CQCodeUtils.getAtWithout(messageVO.getRaw_message());
 		String response = chatExecutor.execute(messageVO);
 		// [CQ:at,qq=222222] [CQ:at,qq=11111] 开始
 		StringBuilder cqBuilder = new StringBuilder();

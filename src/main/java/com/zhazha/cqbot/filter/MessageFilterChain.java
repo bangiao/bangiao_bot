@@ -40,7 +40,7 @@ public class MessageFilterChain {
 		if (filter == null) {
 			return null;
 		}
-		return filter.doFilter(vo, chain);
+		return filter.filter(vo, chain);
 	}
 	
 }

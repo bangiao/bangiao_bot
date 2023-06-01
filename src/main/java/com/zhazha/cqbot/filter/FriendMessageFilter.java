@@ -5,7 +5,6 @@ import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.runner.ChatExecutor;
-import com.zhazha.cqbot.utils.SendMessageUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,8 +16,6 @@ import javax.annotation.Resource;
 public class FriendMessageFilter implements MessageFilter {
 	@Resource
 	private ChatExecutor chatExecutor;
-	@Resource
-	private SendMessageUtils sendMessageUtils;
 	
 	@Override
 	public Boolean match(BaseVO vo) {
@@ -35,9 +32,6 @@ public class FriendMessageFilter implements MessageFilter {
 	
 	@Override
 	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
-		if (!match(vo)) {
-			return chain.doChain(vo, chain);
-		}
 		MessageVO messageVO = (MessageVO) vo;
 		String response = chatExecutor.execute(messageVO);
 		return ReplyVO.builder().reply(response).at_sender(true).auto_escape(false).build();

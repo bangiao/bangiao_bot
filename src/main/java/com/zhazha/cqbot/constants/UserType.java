@@ -1,5 +1,5 @@
 package com.zhazha.cqbot.constants;
 
 public enum UserType {
-	ADMIN, USER, BLOCK
+	ADMIN, USER, BLOCK, BOT,
 }

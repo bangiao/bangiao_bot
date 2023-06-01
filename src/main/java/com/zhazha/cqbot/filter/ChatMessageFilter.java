@@ -19,10 +19,9 @@ import java.util.List;
 @Component
 public class ChatMessageFilter implements MessageFilter {
     
-    public static final String CMD_CHAT = "/chat ";
-    public static final String CMD_CHAT_ADD = CMD_CHAT + "add ";
-    public static final String CMD_CHAT_GET = CMD_CHAT + "get";
-    public static final String CMD_CHAT_DEL = CMD_CHAT + "delete ";
+    public static final String CMD_CHAT_ADD = Constants.CMD_CHAT + "add ";
+    public static final String CMD_CHAT_GET = Constants.CMD_CHAT + "get";
+    public static final String CMD_CHAT_DEL = Constants.CMD_CHAT + "delete ";
     public static final String URL = "https://api.chatanywhere.com.cn";
     
     @Resource
@@ -38,14 +37,11 @@ public class ChatMessageFilter implements MessageFilter {
             return false;
         }
         // chat add api key
-        return StrUtil.startWithAnyIgnoreCase(messageVO.getRaw_message(), CMD_CHAT);
+        return StrUtil.startWithAnyIgnoreCase(messageVO.getRaw_message(), Constants.CMD_CHAT);
     }
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
-        if (!match(vo)) {
-            return chain.doChain(vo, chain);
-        }
         MessageVO messageVO = (MessageVO) vo;
         String rawMessage = messageVO.getRaw_message();
         Long userId = messageVO.getUser_id();

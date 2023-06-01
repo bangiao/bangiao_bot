@@ -13,36 +13,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BlockMessageFilter implements MessageFilter {
-	
-	@Resource
-	private UserService userService;
-	private final Set<String> urls = new HashSet<>();
-	
-	public void addUrl(String url) {
-		this.urls.add(url);
-	}
-	
-	@Override
-	public Boolean match(BaseVO vo) {
-		MessageVO messageVO = (MessageVO) vo;
-		for (String url : urls) {
-			if (StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), url)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
-	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
-		if (!match(vo)) {
-			return chain.doChain(vo, chain);
-		}
-		MessageVO messageVO = (MessageVO) vo;
-		User blockUser = userService.getBlockUser(messageVO.getUser_id());
-		if (blockUser != null) {
-			throw new NotifyException("请求被拦截, 你或者你申请的用户是黑名单");
-		}
-		return chain.doChain(vo,chain);
-	}
+    
+    @Resource
+    private UserService userService;
+    private final Set<String> urls = new HashSet<>();
+    
+    public void addUrl(String url) {
+        this.urls.add(url);
+    }
+    
+    @Override
+    public Boolean match(BaseVO vo) {
+        MessageVO messageVO = (MessageVO) vo;
+        for (String url : urls) {
+            if (StrUtil.containsIgnoreCase(messageVO.getRaw_message(), url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+        MessageVO messageVO = (MessageVO) vo;
+        User blockUser = userService.getBlockUser(messageVO.getUser_id());
+        if (blockUser != null) {
+            throw new NotifyException("请求被拦截, 你或者你申请的用户是黑名单");
+        }
+        return chain.doChain(vo, chain);
+    }
 }
