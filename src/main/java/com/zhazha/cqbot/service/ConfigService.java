@@ -11,6 +11,9 @@ import java.util.List;
 public class ConfigService extends ServiceImpl<ConfigMapper, Config> {
     
     public List<Config> listByQQ(Long qq) {
+        if (null == qq) {
+            return null;
+        }
         return lambdaQuery()
                 .eq(Config::getValue3, qq)
                 .list();

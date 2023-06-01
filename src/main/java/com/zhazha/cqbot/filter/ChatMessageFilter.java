@@ -1,5 +1,6 @@
 package com.zhazha.cqbot.filter;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.bean.Config;
 import com.zhazha.cqbot.constants.Constants;
@@ -94,6 +95,9 @@ public class ChatMessageFilter implements MessageFilter {
     
     private ReplyVO chatGet(Long userId) {
         List<Config> configs = configService.listByQQ(userId);
+        if (CollUtil.isEmpty(configs)) {
+            return ReplyVO.builder().reply("没有 user").build();
+        }
         String s = configs.stream().map(config ->
                         Triple.of(config.getId(), config.getValue1(), config.getValue2()))
                 .toString();
