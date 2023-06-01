@@ -13,7 +13,6 @@ import com.zhazha.cqbot.service.ConfigService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -25,9 +24,10 @@ import java.util.stream.Collectors;
 @Component
 public class ChatMessageFilter implements MessageFilter {
     
-    public static final String CMD_CHAT_ADD = Constants.CMD_CHAT + "add ";
+    public static final String CMD_CHAT_ADD = Constants.CMD_CHAT + "add";
     public static final String CMD_CHAT_GET = Constants.CMD_CHAT + "get";
-    public static final String CMD_CHAT_DEL = Constants.CMD_CHAT + "delete ";
+    public static final String CMD_CHAT_DEL = Constants.CMD_CHAT + "delete";
+    public static final String CMD_CHAT_LIST = Constants.CMD_CHAT + "list";
     
     @Resource
     private ConfigService configService;
@@ -38,13 +38,13 @@ public class ChatMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         // 强调只能在私聊找执行该指令
         MessageVO messageVO = (MessageVO) vo;
-        return StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), Constants.CMD_CHAT);
+        return StrUtil.startWithIgnoreCase(StrUtil.trimStart(messageVO.getRaw_message()), Constants.CMD_CHAT);
     }
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
-        String rawMessage = messageVO.getRaw_message();
+        String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
         Long userId = messageVO.getUser_id();
         
         if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_ADD)) {
@@ -56,6 +56,9 @@ public class ChatMessageFilter implements MessageFilter {
         } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_DEL)) {
             // 只能删除自己的
             return chatDel(rawMessage);
+        }  else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_LIST)) {
+            // 列表
+            return chatList(userId.toString(), rawMessage);
         } else {
             String response = chatEngine.execute(messageVO);
             return ReplyVO.builder()
@@ -63,6 +66,31 @@ public class ChatMessageFilter implements MessageFilter {
                     .reply(response)
                     .build();
         }
+    }
+    
+    private ReplyVO chatList(String userId, String rawMessage) {
+        if (StrUtil.isBlank(userId) || StrUtil.isBlank(rawMessage)) {
+            return ReplyVO.builder()
+                    .at_sender(true)
+                    .reply("你的格式不对")
+                    .build();
+        }
+        if (!StrUtil.equalsIgnoreCase(userId, Constants.adminQQ)) {
+            return ReplyVO.builder()
+                    .at_sender(true)
+                    .reply("你的权限不够")
+                    .build();
+        }
+        List<Config> configList = configService.listChat(userId);
+        String s = configList.stream().map(config ->
+                        new Triple(config.getId(), config.getValue1(), config.getValue2())
+                )
+                .collect(Collectors.toList())
+                .toString();
+        return ReplyVO.builder()
+                .at_sender(true)
+                .reply(s)
+                .build();
     }
     
     private ReplyVO chatAdd(String rawMessage, Long userId) {
@@ -103,10 +131,11 @@ public class ChatMessageFilter implements MessageFilter {
         if (CollUtil.isEmpty(configs)) {
             return ReplyVO.builder()
                     .at_sender(true)
-                    .reply("没有 user").build();
+                    .reply("没有配置信息").build();
         }
         String s = configs.stream().map(config ->
-                        new Triple(config.getId(), config.getValue1(), config.getValue2()))
+                        new Triple(config.getId(), config.getValue1(), config.getValue2())
+                )
                 .collect(Collectors.toList())
                 .toString();
         return ReplyVO.builder()
@@ -114,7 +143,6 @@ public class ChatMessageFilter implements MessageFilter {
                 .reply(s).build();
     }
     
-    @ToString
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
@@ -122,5 +150,14 @@ public class ChatMessageFilter implements MessageFilter {
         private String id;
         private String name;
         private String key;
+        
+        @Override
+        public String toString() {
+            return "{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", key='" + key + '\'' +
+                    "}\n";
+        }
     }
 }

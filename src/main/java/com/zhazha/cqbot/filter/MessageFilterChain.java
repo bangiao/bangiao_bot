@@ -27,14 +27,23 @@ public class MessageFilterChain {
 	
 	public ReplyVO doChain(BaseVO vo, MessageFilterChain chain) throws Exception, NotifyException {
 		if (CollUtil.isEmpty(this.filters)) {
-			return null;
+			return ReplyVO.builder()
+					.at_sender(true)
+					.reply("请联系管理员配置功能")
+					.build();
 		}
 		if (this.filters.size() <= this.pos) {
-			return null;
+			return ReplyVO.builder()
+					.at_sender(true)
+					.reply("没有匹配上指令")
+					.build();
 		}
 		MessageFilter filter = this.filters.get(this.pos++);
 		if (filter == null) {
-			return null;
+			return ReplyVO.builder()
+					.at_sender(true)
+					.reply("过滤器配置错误, 请联系管理员")
+					.build();
 		}
 		return filter.filter(vo, chain);
 	}

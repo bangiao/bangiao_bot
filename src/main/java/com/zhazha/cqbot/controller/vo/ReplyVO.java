@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class ReplyVO {
 	private String reply;
-	private Boolean auto_escape = false;
+	private Boolean auto_escape;
 	private Boolean at_sender;
 	private Boolean delete;
 	private Boolean kick;

@@ -22,10 +22,10 @@ public class UserMessageFilter implements MessageFilter {
     
     @Resource
     private UserService userService;
-    public static final String CMD_USER_REG = Constants.CMD_USER + "register ";
-    public static final String CMD_USER_BLK = Constants.CMD_USER + "block ";
-    public static final String CMD_USER_DEL = Constants.CMD_USER + "del ";
-    public static final String CMD_USER_GET = Constants.CMD_USER + "get ";
+    public static final String CMD_USER_REG = Constants.CMD_USER + "register";
+    public static final String CMD_USER_BLK = Constants.CMD_USER + "block";
+    public static final String CMD_USER_DEL = Constants.CMD_USER + "del";
+    public static final String CMD_USER_GET = Constants.CMD_USER + "get";
     public static final String CMD_USER_LIST = Constants.CMD_USER + "list";
     
     @Override
@@ -33,7 +33,7 @@ public class UserMessageFilter implements MessageFilter {
         try {
             MessageVO messageVO = (MessageVO) vo;
             String raw_message = messageVO.getRaw_message();
-            return StrUtil.startWithIgnoreCase(raw_message, Constants.CMD_USER);
+            return StrUtil.startWithIgnoreCase(StrUtil.trimStart(raw_message), Constants.CMD_USER);
         } catch (Exception ignored) {
         }
         return false;
@@ -53,7 +53,7 @@ public class UserMessageFilter implements MessageFilter {
             throw new NotifyException("你没有权限");
         }
         
-        String raw_message = messageVO.getRaw_message();
+        String raw_message = StrUtil.trimStart(messageVO.getRaw_message());
         
         if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_REG)) {
             // 用户注册
@@ -71,7 +71,10 @@ public class UserMessageFilter implements MessageFilter {
             // 删除
             return deleteUser(raw_message);
         }
-        return null;
+        return ReplyVO.builder()
+                .at_sender(true)
+                .reply("指令不正确")
+                .build();
     }
     
     private ReplyVO deleteUser(String raw_message) {
@@ -103,7 +106,7 @@ public class UserMessageFilter implements MessageFilter {
         List<User> list = userService.list();
         return ReplyVO.builder()
                 .auto_escape(true)
-                .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType())).toArray()))
+                .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()))
                 .at_sender(true)
                 .build();
     }
@@ -124,7 +127,7 @@ public class UserMessageFilter implements MessageFilter {
     }
     
     private ReplyVO blockUser(MessageVO messageVO) {
-        String rawMessage = messageVO.getRaw_message();
+        String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
         String qq = rawMessage.replaceFirst(CMD_USER_BLK, "").trim();
         User user = userService.getUser(qq);
         if (null == user) {

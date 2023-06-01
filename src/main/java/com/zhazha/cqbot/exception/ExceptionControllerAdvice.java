@@ -23,8 +23,8 @@ public class ExceptionControllerAdvice {
 		Random random = new Random(new Date().getTime());
 		int i = random.nextInt(125);
 		ReplyVO replyVO = ReplyVO.builder()
-				.at_sender(true)
 				.reply("通知: " + e.getMessage() + " [CQ:face,id=" + i + "] ")
+				.at_sender(true)
 				.build();
 		return JSONUtil.toJsonStr(replyVO);
 	}
