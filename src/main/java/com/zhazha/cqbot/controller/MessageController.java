@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -18,13 +19,16 @@ public class MessageController {
 	private MessageDispatcher messageDispatcher;
 	
 	@RequestMapping("")
-	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) throws Exception {
+	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		test(maps);
 		ReplyVO vo = messageDispatcher.dispatch(maps);
+
+		String jsonStr = JSONUtil.toJsonStr(vo);
+		System.err.println(jsonStr);
 		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			return ReplyVO.builder().build();
 		}
-		test(maps);
 		return vo;
 	}
 	

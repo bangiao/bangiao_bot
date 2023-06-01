@@ -4,6 +4,8 @@ import com.zhazha.cqbot.exception.ChatException;
 
 public interface ChatRequest {
 	
+	Boolean match(String key);
+	
 	String request(Long qq, String question) throws ChatException;
 	
 }

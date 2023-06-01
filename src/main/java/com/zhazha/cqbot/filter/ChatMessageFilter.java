@@ -3,6 +3,7 @@ package com.zhazha.cqbot.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.bean.Config;
+import com.zhazha.cqbot.chat.ChatEngine;
 import com.zhazha.cqbot.constants.ConfigType;
 import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.controller.vo.BaseVO;
@@ -26,6 +27,8 @@ public class ChatMessageFilter implements MessageFilter {
     
     @Resource
     private ConfigService configService;
+    @Resource
+    private ChatEngine chatEngine;
     
     @Override
     public Boolean match(BaseVO vo) {
@@ -49,8 +52,13 @@ public class ChatMessageFilter implements MessageFilter {
         } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_DEL)) {
             // 只能删除自己的
             return chatDel(rawMessage);
+        } else {
+            System.err.println("问题是: " + messageVO.getRaw_message());
+            String response = chatEngine.execute(messageVO);
+            return ReplyVO.builder()
+                    .reply(response)
+                    .build();
         }
-        return null;
     }
     
     private ReplyVO chatAdd(String rawMessage, Long userId) {

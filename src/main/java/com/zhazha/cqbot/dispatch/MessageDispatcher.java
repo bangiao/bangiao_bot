@@ -23,6 +23,7 @@ public class MessageDispatcher {
             throw new RuntimeException("消息类型不对");
         }
         switch (post_type) {
+            // TODO: 2023/5/30 后续还有很多别事件类型
             case "meta_event": {
                 // 这种类型的消息不用处理
                 return null;
@@ -32,7 +33,16 @@ public class MessageDispatcher {
                         MessageVO.class, "");
                 return filterChainManager.createMessageFilterChain(messageVO);
             }
-            // TODO: 2023/5/30 后续还有很多别事件类型
+            case "notice": {
+                return ReplyVO.builder()
+                        .reply("1")
+                        .build();
+            }
+            case "request": {
+                return ReplyVO.builder()
+                        .reply("2")
+                        .build();
+            }
         }
         return null;
     }

@@ -2,6 +2,8 @@ package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqbot.bean.User;
+import com.zhazha.cqbot.constants.Constants;
+import com.zhazha.cqbot.constants.UserType;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
@@ -16,17 +18,17 @@ public class BlockMessageFilter implements MessageFilter {
     
     @Resource
     private UserService userService;
-    private final Set<String> urls = new HashSet<>();
+    private final Set<String> commands = new HashSet<>();
     
     public void addUrl(String url) {
-        this.urls.add(url);
+        this.commands.add(url);
     }
     
     @Override
     public Boolean match(BaseVO vo) {
         MessageVO messageVO = (MessageVO) vo;
-        for (String url : urls) {
-            if (StrUtil.containsIgnoreCase(messageVO.getRaw_message(), url)) {
+        for (String cmd : commands) {
+            if (StrUtil.containsIgnoreCase(messageVO.getRaw_message(), cmd)) {
                 return true;
             }
         }
@@ -36,10 +38,17 @@ public class BlockMessageFilter implements MessageFilter {
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
         MessageVO messageVO = (MessageVO) vo;
-        User blockUser = userService.getBlockUser(messageVO.getUser_id());
-        if (blockUser != null) {
-            throw new NotifyException("请求被拦截, 你或者你申请的用户是黑名单");
+        if (StrUtil.equalsIgnoreCase(messageVO.getUser_id().toString(), Constants.adminQQ)) {
+            return chain.doChain(vo, chain);
+        }
+        User user = userService.getUser(messageVO.getUser_id());
+        if (user == null) {
+            throw new NotifyException("请求被拦截, 你没有权限");
+        }
+        if (StrUtil.equalsIgnoreCase(user.getType(), UserType.BLOCK.name())) {
+            throw new NotifyException("请求被拦截, 你没有权限");
         }
         return chain.doChain(vo, chain);
     }
+    
 }

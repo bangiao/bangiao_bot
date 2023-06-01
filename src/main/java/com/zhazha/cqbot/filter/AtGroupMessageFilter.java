@@ -1,7 +1,7 @@
 package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.util.StrUtil;
-import com.zhazha.cqbot.chat.ChatExecutor;
+import com.zhazha.cqbot.chat.ChatEngine;
 import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
@@ -20,7 +20,7 @@ import java.util.Set;
 public class AtGroupMessageFilter implements MessageFilter {
 	
 	@Resource
-	private ChatExecutor chatExecutor;
+	private ChatEngine chatEngine;
 	
 	@Override
 	public Boolean match(BaseVO vo) {
@@ -37,7 +37,7 @@ public class AtGroupMessageFilter implements MessageFilter {
 		MessageVO messageVO = (MessageVO) vo;
 		
 		Set<String> at = CQCodeUtils.getAtWithout(messageVO.getRaw_message());
-		String response = chatExecutor.execute(messageVO);
+		String response = chatEngine.execute(messageVO);
 		// [CQ:at,qq=222222] [CQ:at,qq=11111] 开始
 		StringBuilder cqBuilder = new StringBuilder();
 		at.forEach(qq -> cqBuilder.append("[CQ:at,qq=").append(qq).append("] "));

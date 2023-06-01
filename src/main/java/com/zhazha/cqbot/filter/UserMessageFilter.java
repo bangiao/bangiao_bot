@@ -18,15 +18,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class UserFilter implements MessageFilter {
+public class UserMessageFilter implements MessageFilter {
     
     @Resource
     private UserService userService;
-    private static final String CMD_USER_REG = Constants.CMD_USER + "register ";
-    private static final String CMD_USER_BLK = Constants.CMD_USER + "block ";
-    private static final String CMD_USER_DEL = Constants.CMD_USER + "delete ";
-    private static final String CMD_USER_GET = Constants.CMD_USER + "get ";
-    private static final String CMD_USER_LIST = Constants.CMD_USER + "list";
+    public static final String CMD_USER_REG = Constants.CMD_USER + "register ";
+    public static final String CMD_USER_BLK = Constants.CMD_USER + "block ";
+    public static final String CMD_USER_DEL = Constants.CMD_USER + "del ";
+    public static final String CMD_USER_GET = Constants.CMD_USER + "get ";
+    public static final String CMD_USER_LIST = Constants.CMD_USER + "list";
     
     @Override
     public Boolean match(BaseVO vo) {
@@ -43,13 +43,13 @@ public class UserFilter implements MessageFilter {
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
         
-        Long userId = messageVO.getUser_id();
-        User byId = userService.getUser(userId);
-        if (null == byId) {
+        Long sendUserId = messageVO.getUser_id();
+        User sendUser = userService.getUser(sendUserId);
+        if (null == sendUser) {
             throw new NotifyException("你没有权限");
         }
-        if (!StrUtil.equalsIgnoreCase(byId.getType(), UserType.ADMIN.name())
-                && !StrUtil.equalsIgnoreCase(userId.toString(), Constants.adminQQ)) {
+        if (!StrUtil.equalsIgnoreCase(sendUser.getType(), UserType.ADMIN.name())
+                && !StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.adminQQ)) {
             throw new NotifyException("你没有权限");
         }
         
@@ -57,7 +57,7 @@ public class UserFilter implements MessageFilter {
         
         if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_REG)) {
             // 用户注册
-            return registerUser(userId, raw_message);
+            return registerUser(sendUserId, raw_message);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_GET)) {
             // 读取
             return getUser(raw_message);
@@ -80,6 +80,14 @@ public class UserFilter implements MessageFilter {
             return ReplyVO.builder()
                     .auto_escape(true)
                     .reply("没有该用户")
+                    .at_sender(true)
+                    .build();
+        }
+        User user = userService.getUser(qq);
+        if (StrUtil.equalsIgnoreCase(user.getType(), UserType.ADMIN.name())) {
+            return ReplyVO.builder()
+                    .auto_escape(true)
+                    .reply("管理员不能删除管理员权限")
                     .at_sender(true)
                     .build();
         }

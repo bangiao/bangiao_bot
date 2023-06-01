@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 public class FilterChainManager {
     
     @Resource
-    private UserFilter userFilter;
+    private UserMessageFilter userMessageFilter;
     @Resource
     private AtGroupMessageFilter atGroupMessageFilter;
     @Resource
@@ -27,7 +27,7 @@ public class FilterChainManager {
         String messageType = vo.getMessage_type();
         if (StrUtil.equalsIgnoreCase(messageType, "private")) {
             // 好友消息或者群里私聊你的消息
-            messageFilterChain.addFilter(userFilter);
+            messageFilterChain.addFilter(userMessageFilter);
             messageFilterChain.addFilter(chatMessageFilter);
         } else {
             // 群消息

@@ -14,7 +14,7 @@ public class GlobalConfig {
     @Bean
     public BlockMessageFilter blockMessageFilter() {
         BlockMessageFilter messageFilter = new BlockMessageFilter();
-        messageFilter.addUrl("#user register ");
+        messageFilter.addUrl(Constants.CMD_USER);
         messageFilter.addUrl(Constants.AT_BOT);
         messageFilter.addUrl(Constants.CMD_CHAT);
         return messageFilter;
@@ -33,6 +33,7 @@ public class GlobalConfig {
         return SensitiveWordBs.newInstance()
 //			    .wordDeny(new MyWordDeny())
                 .ignoreRepeat(false)
+                .enableUrlCheck(false)
                 .init();
     }
     
