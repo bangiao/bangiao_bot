@@ -10,6 +10,8 @@ import com.zhazha.cqbot.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> {
     
@@ -52,26 +54,61 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .one();
     }
     
-    public User getByQQ(Long userId) {
-        return getUser(userId);
+    public User get(Long userId) {
+        if (null == userId) {
+            return null;
+        }
+        return lambdaQuery().eq(User::getQq, userId)
+                .one();
     }
     
-    public User getByQQ(String userId) {
-        return getUser(userId);
+    public User get(String userId) {
+        if (StrUtil.isBlank(userId)) {
+            return null;
+        }
+        return lambdaQuery().eq(User::getQq, userId)
+                .one();
     }
     
     public User getUser(Long userId) {
         if (null == userId) {
             return null;
         }
-        return getById(userId);
+        return lambdaQuery().eq(User::getQq, userId)
+                .eq(User::getType, UserType.USER.name())
+                .one();
     }
     
     public User getUser(String userId) {
         if (StrUtil.isBlank(userId)) {
             return null;
         }
-        return getById(userId);
+        return lambdaQuery().eq(User::getQq, userId)
+                .eq(User::getType, UserType.USER.name())
+                .one();
     }
     
+    public User getAdmin(String qq) {
+        if (StrUtil.isBlank(qq)) {
+            return null;
+        }
+        return lambdaQuery().eq(User::getQq, qq)
+                .eq(User::getType, UserType.ADMIN.name())
+                .one();
+    }
+    
+    public User getAdmin(Long qq) {
+        if (null == qq) {
+            return null;
+        }
+        return lambdaQuery().eq(User::getQq, qq)
+                .eq(User::getType, UserType.ADMIN.name())
+                .one();
+    }
+    
+    public List<User> listAdmin() {
+        return lambdaQuery()
+                .eq(User::getType, UserType.ADMIN.name())
+                .list();
+    }
 }

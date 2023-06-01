@@ -41,7 +41,7 @@ public class BlockMessageFilter implements MessageFilter {
         if (StrUtil.equalsIgnoreCase(messageVO.getUser_id().toString(), Constants.adminQQ)) {
             return chain.doChain(vo, chain);
         }
-        User user = userService.getUser(messageVO.getUser_id());
+        User user = userService.get(messageVO.getUser_id());
         if (user == null) {
             throw new NotifyException("请求被拦截, 你没有权限");
         }

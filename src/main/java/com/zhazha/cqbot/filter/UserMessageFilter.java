@@ -108,7 +108,7 @@ public class UserMessageFilter implements MessageFilter {
     }
     
     private ReplyVO blockUser(User sendUser, MessageVO messageVO) {
-        // 发送者和被操作的qq是否有权限
+        // 你的权限是否大于即将操作的权限?
         String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
         String qq = rawMessage.replaceFirst(CMD_USER_BLK, "").trim();
         User user = userService.get(qq);
