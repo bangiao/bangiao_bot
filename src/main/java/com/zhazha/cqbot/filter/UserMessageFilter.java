@@ -10,6 +10,8 @@ import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.BlockException;
 import com.zhazha.cqbot.exception.NotifyException;
 import com.zhazha.cqbot.service.UserService;
+import com.zhazha.cqbot.utils.PermissionUtils;
+import com.zhazha.cqbot.utils.ReplyUtils;
 import kotlin.Pair;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +24,7 @@ public class UserMessageFilter implements MessageFilter {
     
     @Resource
     private UserService userService;
-    public static final String CMD_USER_REG = Constants.CMD_USER + "register";
+    public static final String CMD_USER_ADD = Constants.CMD_USER + "add";
     public static final String CMD_USER_BLK = Constants.CMD_USER + "block";
     public static final String CMD_USER_DEL = Constants.CMD_USER + "del";
     public static final String CMD_USER_GET = Constants.CMD_USER + "get";
@@ -44,7 +46,7 @@ public class UserMessageFilter implements MessageFilter {
         MessageVO messageVO = (MessageVO) vo;
         
         Long sendUserId = messageVO.getUser_id();
-        User sendUser = userService.getUser(sendUserId);
+        User sendUser = userService.get(sendUserId);
         if (null == sendUser) {
             throw new NotifyException("你没有权限");
         }
@@ -55,100 +57,79 @@ public class UserMessageFilter implements MessageFilter {
         
         String raw_message = StrUtil.trimStart(messageVO.getRaw_message());
         
-        if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_REG)) {
+        if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_ADD)) {
             // 用户注册
-            return registerUser(sendUserId, raw_message);
+            return addUser(sendUserId, raw_message);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_GET)) {
             // 读取
             return getUser(raw_message);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_BLK)) {
             // 拉黑
-            return blockUser(messageVO);
+            return blockUser(sendUser, messageVO);
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_LIST)) {
             // 列出授权列表
             return listUser();
         } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_DEL)) {
             // 删除
-            return deleteUser(raw_message);
+            return deleteUser(sendUser, raw_message);
         }
-        return ReplyVO.builder()
-                .at_sender(true)
-                .reply("指令不正确")
-                .build();
+        
+        return ReplyUtils.build("指令不正确\n");
     }
     
-    private ReplyVO deleteUser(String raw_message) {
+    private ReplyVO deleteUser(User sendUser, String raw_message) {
+        // 你的权限是否大于即将操作的权限?
         String qq = raw_message.replaceFirst(CMD_USER_DEL, "").trim();
         if (StrUtil.isBlank(qq)) {
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply("没有该用户")
-                    .at_sender(true)
-                    .build();
+            return ReplyUtils.build("没有该用户");
         }
-        User user = userService.getUser(qq);
-        if (StrUtil.equalsIgnoreCase(user.getType(), UserType.ADMIN.name())) {
-            return ReplyVO.builder()
-                    .auto_escape(true)
-                    .reply("管理员不能删除管理员权限")
-                    .at_sender(true)
-                    .build();
+        User user = userService.get(qq);
+        if (null == user) {
+            return ReplyUtils.build("没有数据");
         }
-        userService.removeById(qq);
-        return ReplyVO.builder()
-                .auto_escape(true)
-                .reply("删除成功")
-                .at_sender(true)
-                .build();
+        if (PermissionUtils.hasPermission(sendUser.getType(), user.getType())) {
+            userService.removeById(qq);
+        }
+        return ReplyUtils.build("删除成功");
     }
     
     private ReplyVO listUser() {
         List<User> list = userService.list();
-        return ReplyVO.builder()
-                .auto_escape(true)
-                .reply(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()))
-                .at_sender(true)
-                .build();
+        return ReplyUtils.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()) + "\n").toArray()));
     }
     
     private ReplyVO getUser(String raw_message) {
         String qq = raw_message.replaceFirst(CMD_USER_GET, "").trim();
-        User user = userService.getUser(qq);
+        User user = userService.get(qq);
         if (user == null) {
-            return ReplyVO.builder()
-                    .at_sender(true)
-                    .reply("没有数据").build();
+            return ReplyUtils.build("没有数据");
         }
-        return ReplyVO.builder()
-                .auto_escape(true)
-                .reply("读取成功: " + user)
-                .at_sender(true)
-                .build();
+        return ReplyUtils.build("读取成功: " + user);
     }
     
-    private ReplyVO blockUser(MessageVO messageVO) {
+    private ReplyVO blockUser(User sendUser, MessageVO messageVO) {
+        // 发送者和被操作的qq是否有权限
         String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
         String qq = rawMessage.replaceFirst(CMD_USER_BLK, "").trim();
-        User user = userService.getUser(qq);
+        User user = userService.get(qq);
         if (null == user) {
             user = User.builder().qq(qq)
                     .createQq(messageVO.getUser_id().toString())
                     .build();
         }
-        user.setType(UserType.BLOCK.name());
-        userService.saveOrUpdate(user);
-        return ReplyVO.builder()
-                .auto_escape(true)
-                .reply("拉黑成功")
-                .at_sender(true)
-                .build();
+        if (PermissionUtils.hasPermission(sendUser.getType(), user.getType())) {
+            user.setType(UserType.BLOCK.name());
+            userService.saveOrUpdate(user);
+        }
+        return ReplyUtils.build("拉黑成功");
     }
     
-    private ReplyVO registerUser(Long userId, String raw_message) {
-        // 1. 检查用户是否已经存在
-        // 2. 注册
-        String qq = raw_message.replace(CMD_USER_REG, "").trim();
-        User one = userService.getUser(qq);
+    private ReplyVO addUser(Long userId, String raw_message) {
+        // 发送者必须是 admin bot or super 角色才有权限添加 user 用户
+        // 被注册者如果是黑名单用户, 则失败
+        // 被注册者如果已经注册则失败
+        String qq = raw_message.replace(CMD_USER_ADD, "").trim();
+        User one = userService.get(qq);
         if (one != null) {
             if (StrUtil.equalsIgnoreCase(one.getType(), UserType.BLOCK.name())) {
                 throw new BlockException("您是黑名单用户, 请联系管理员!!!");
@@ -161,11 +142,7 @@ public class UserMessageFilter implements MessageFilter {
                 .qq(qq)
                 .build();
         userService.saveOrUpdate(user);
-        return ReplyVO.builder()
-                .auto_escape(true)
-                .reply("注册成功")
-                .at_sender(true)
-                .build();
+        return ReplyUtils.build("注册成功");
     }
     
 }
