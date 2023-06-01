@@ -111,4 +111,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .eq(User::getType, UserType.ADMIN.name())
                 .list();
     }
+    
+    public List<User> listUser() {
+        return lambdaQuery()
+                .eq(User::getType, UserType.USER.name())
+                .list();
+    }
 }

@@ -80,7 +80,7 @@ public class AdminMessageFilter implements MessageFilter {
     }
     
     private ReplyVO listAdmin() {
-        List<User> list = userService.listAdmin();
+        List<User> list = userService.list();
         return ReplyUtils.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()));
     }
     

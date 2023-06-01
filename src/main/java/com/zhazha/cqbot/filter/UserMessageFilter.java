@@ -94,7 +94,7 @@ public class UserMessageFilter implements MessageFilter {
     }
     
     private ReplyVO listUser() {
-        List<User> list = userService.list();
+        List<User> list = userService.listUser();
         return ReplyUtils.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()) + "\n").toArray()));
     }
     
@@ -104,7 +104,10 @@ public class UserMessageFilter implements MessageFilter {
         if (user == null) {
             return ReplyUtils.build("没有数据");
         }
-        return ReplyUtils.build("读取成功: " + user);
+        if (StrUtil.equalsIgnoreCase(user.getType(), UserType.USER.name())) {
+            return ReplyUtils.build("读取成功: " + user);
+        }
+        return ReplyUtils.build("没有User数据");
     }
     
     private ReplyVO blockUser(User sendUser, MessageVO messageVO) {
