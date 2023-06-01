@@ -4,7 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,8 +51,8 @@ public class CQCodeUtils {
 	 * @param cqCode
 	 * @return
 	 */
-	public static List<String> getAt(String cqCode) {
-		ArrayList<String> stringArrayList = new ArrayList<>();
+	public static Set<String> getAt(String cqCode) {
+		Set<String> stringArrayList = new HashSet<>();
 		Pattern qqPattern = Pattern.compile("(?<=qq=)(\\d+|all)");
 		Matcher qqMatcher = qqPattern.matcher(cqCode);
 		while (qqMatcher.find()) {
