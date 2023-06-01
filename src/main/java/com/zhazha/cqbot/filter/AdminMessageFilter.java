@@ -71,7 +71,6 @@ public class AdminMessageFilter implements MessageFilter {
     }
     
     private ReplyVO deleteAdmin(String raw_message) {
-        // 你的权限是否大于即将操作的权限?
         String qq = raw_message.replaceFirst(CMD_ADMIN_DEL, "").trim();
         if (StrUtil.isBlank(qq)) {
             return ReplyUtils.build("没有该用户");
