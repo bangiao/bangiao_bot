@@ -10,12 +10,16 @@ import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.service.ConfigService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -53,9 +57,9 @@ public class ChatMessageFilter implements MessageFilter {
             // 只能删除自己的
             return chatDel(rawMessage);
         } else {
-            System.err.println("问题是: " + messageVO.getRaw_message());
             String response = chatEngine.execute(messageVO);
             return ReplyVO.builder()
+                    .at_sender(true)
                     .reply(response)
                     .build();
         }
@@ -80,7 +84,9 @@ public class ChatMessageFilter implements MessageFilter {
             config.setValue2(code);
         }
         configService.saveOrUpdate(config);
-        return ReplyVO.builder().reply("保存成功").build();
+        return ReplyVO.builder()
+                .at_sender(true)
+                .reply("保存成功").build();
     }
     
     private ReplyVO chatDel(String rawMessage) {
@@ -88,17 +94,33 @@ public class ChatMessageFilter implements MessageFilter {
         configService.removeById(id);
         return ReplyVO.builder()
                 .reply("删除成功")
+                .at_sender(true)
                 .build();
     }
     
     private ReplyVO chatGet(Long userId) {
         List<Config> configs = configService.listByQQ(userId);
         if (CollUtil.isEmpty(configs)) {
-            return ReplyVO.builder().reply("没有 user").build();
+            return ReplyVO.builder()
+                    .at_sender(true)
+                    .reply("没有 user").build();
         }
         String s = configs.stream().map(config ->
-                        Triple.of(config.getId(), config.getValue1(), config.getValue2()))
+                        new Triple(config.getId(), config.getValue1(), config.getValue2()))
+                .collect(Collectors.toList())
                 .toString();
-        return ReplyVO.builder().reply(s).build();
+        return ReplyVO.builder()
+                .at_sender(true)
+                .reply(s).build();
+    }
+    
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    private static class Triple {
+        private String id;
+        private String name;
+        private String key;
     }
 }

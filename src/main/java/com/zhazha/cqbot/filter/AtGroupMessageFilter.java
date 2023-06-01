@@ -35,7 +35,6 @@ public class AtGroupMessageFilter implements MessageFilter {
 	@Override
 	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
 		MessageVO messageVO = (MessageVO) vo;
-		
 		Set<String> at = CQCodeUtils.getAtWithout(messageVO.getRaw_message());
 		String response = chatEngine.execute(messageVO);
 		// [CQ:at,qq=222222] [CQ:at,qq=11111] 开始

@@ -35,11 +35,13 @@ public class MessageDispatcher {
             }
             case "notice": {
                 return ReplyVO.builder()
+                        .at_sender(true)
                         .reply("1")
                         .build();
             }
             case "request": {
                 return ReplyVO.builder()
+                        .at_sender(true)
                         .reply("2")
                         .build();
             }

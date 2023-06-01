@@ -112,7 +112,9 @@ public class UserMessageFilter implements MessageFilter {
         String qq = raw_message.replaceFirst(CMD_USER_GET, "").trim();
         User user = userService.getUser(qq);
         if (user == null) {
-            return ReplyVO.builder().reply("没有数据").build();
+            return ReplyVO.builder()
+                    .at_sender(true)
+                    .reply("没有数据").build();
         }
         return ReplyVO.builder()
                 .auto_escape(true)

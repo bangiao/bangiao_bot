@@ -23,6 +23,7 @@ public class ExceptionControllerAdvice {
 		Random random = new Random(new Date().getTime());
 		int i = random.nextInt(125);
 		ReplyVO replyVO = ReplyVO.builder()
+				.at_sender(true)
 				.reply("通知: " + e.getMessage() + " [CQ:face,id=" + i + "] ")
 				.build();
 		return JSONUtil.toJsonStr(replyVO);
@@ -48,6 +49,7 @@ public class ExceptionControllerAdvice {
 		ReplyVO replyVO = ReplyVO.builder()
 				.reply("chatgpt警告: " + e.getMessage() + " [CQ:face,id=6] ")
 				.at_sender(true)
+				.delete(true)
 				.build();
 		return JSONUtil.toJsonStr(replyVO);
 	}
@@ -61,6 +63,7 @@ public class ExceptionControllerAdvice {
 		EmailUtils.exceptionSendEmail("糟糕, 出现异常了", e.getMessage());
 		ReplyVO replyVO = ReplyVO.builder()
 				.reply("我摔倒了, 快通知我主人来扶我~~~[CQ:face,id=9] ")
+				.at_sender(true)
 				.build();
 		return JSONUtil.toJsonStr(replyVO);
 	}

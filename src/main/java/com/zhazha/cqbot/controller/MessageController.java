@@ -20,11 +20,7 @@ public class MessageController {
 	
 	@RequestMapping("")
 	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		test(maps);
 		ReplyVO vo = messageDispatcher.dispatch(maps);
-
-		String jsonStr = JSONUtil.toJsonStr(vo);
-		System.err.println(jsonStr);
 		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			return ReplyVO.builder().build();
