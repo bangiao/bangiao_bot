@@ -2,7 +2,7 @@ package com.zhazha.cqbot.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
-import com.zhazha.cqbot.dispatch.DispatchFactory;
+import com.zhazha.cqbot.dispatch.MessageDispatcher;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +15,11 @@ import java.util.Map;
 public class MessageController {
 	
 	@Resource
-	private DispatchFactory dispatchFactory;
+	private MessageDispatcher messageDispatcher;
 	
 	@RequestMapping("")
 	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) throws Exception {
-		ReplyVO vo = dispatchFactory.dispatch(maps);
+		ReplyVO vo = messageDispatcher.dispatch(maps);
 		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			return ReplyVO.builder().build();

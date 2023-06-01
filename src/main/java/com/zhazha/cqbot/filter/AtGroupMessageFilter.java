@@ -28,9 +28,6 @@ public class AtGroupMessageFilter implements MessageFilter {
 		if (null == messageVO) {
 			return false;
 		}
-		if (!StrUtil.equalsIgnoreCase(messageVO.getMessage_type(), "group")) {
-			return false;
-		}
 		String raw_message = messageVO.getRaw_message();
 		return StrUtil.containsIgnoreCase(raw_message, Constants.AT_BOT);
 	}

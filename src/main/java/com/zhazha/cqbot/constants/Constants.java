@@ -11,8 +11,7 @@ public class Constants {
     public static final String URL = "https://api.chatanywhere.com.cn";
 	public static final String AT_BOT = "[CQ:at,qq=" + Constants.BotQQ + "]";
 	public static final String CMD_USER = "#user ";
-	public static final String CMD_CHAT = "/chat ";
-	public static final String CHAT = "## ";
+	public static final String CMD_CHAT = "## ";
 	public static String emailPwd = "";
 	public static final List<String> toEmail = List.of("bangiao@qq.com");
 	public static final String hostName = "smtp.qq.com";

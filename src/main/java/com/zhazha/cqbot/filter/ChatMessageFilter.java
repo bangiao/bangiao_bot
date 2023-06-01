@@ -31,12 +31,6 @@ public class ChatMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         // 强调只能在私聊找执行该指令
         MessageVO messageVO = (MessageVO) vo;
-        String messageType = messageVO.getMessage_type();
-        if (!StrUtil.equalsIgnoreCase(messageType, "private")) {
-            // 不是私人聊天
-            return false;
-        }
-        // chat add api key
         return StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), Constants.CMD_CHAT);
     }
     

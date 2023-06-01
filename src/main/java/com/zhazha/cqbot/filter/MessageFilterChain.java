@@ -4,14 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.exception.NotifyException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Scope("prototype")
-@Component
 public class MessageFilterChain {
 	
 	private final List<MessageFilter> filters;
