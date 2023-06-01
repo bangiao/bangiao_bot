@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.runner;
+package com.zhazha.cqbot.chat;
 
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.request.ChatRequest;

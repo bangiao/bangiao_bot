@@ -14,6 +14,7 @@ public class GlobalConfig {
         BlockMessageFilter messageFilter = new BlockMessageFilter();
         messageFilter.addUrl("#user register ");
         messageFilter.addUrl(Constants.AT_BOT);
+        messageFilter.addUrl(Constants.CHAT);
         return messageFilter;
     }
     

@@ -1,17 +1,15 @@
 package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.util.StrUtil;
+import com.zhazha.cqbot.chat.ChatExecutor;
+import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
-import com.zhazha.cqbot.runner.ChatExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-/**
- * 这个的优先级应该最后的, 因为 match 不太精确
- */
 @Component
 public class FriendMessageFilter implements MessageFilter {
 	@Resource
@@ -22,7 +20,7 @@ public class FriendMessageFilter implements MessageFilter {
 		try {
 			MessageVO messageVO = (MessageVO) vo;
 			String raw_message = messageVO.getRaw_message();
-			if (StrUtil.startWithIgnoreCase(raw_message, "## ")) {
+			if (StrUtil.startWithIgnoreCase(raw_message, Constants.CHAT)) {
 				return true;
 			}
 		} catch (Exception ignored) {
@@ -31,9 +29,10 @@ public class FriendMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
 		MessageVO messageVO = (MessageVO) vo;
 		String response = chatExecutor.execute(messageVO);
-		return ReplyVO.builder().reply(response).at_sender(true).auto_escape(false).build();
+		return ReplyVO.builder().reply(response).at_sender(true)
+				.auto_escape(false).build();
 	}
 }

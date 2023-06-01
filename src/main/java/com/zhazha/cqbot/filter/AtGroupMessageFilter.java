@@ -1,11 +1,11 @@
 package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.util.StrUtil;
+import com.zhazha.cqbot.chat.ChatExecutor;
 import com.zhazha.cqbot.constants.Constants;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
-import com.zhazha.cqbot.runner.ChatExecutor;
 import com.zhazha.cqbot.utils.CQCodeUtils;
 import org.springframework.stereotype.Component;
 
@@ -36,7 +36,7 @@ public class AtGroupMessageFilter implements MessageFilter {
 	}
 	
 	@Override
-	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+	public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
 		MessageVO messageVO = (MessageVO) vo;
 		
 		Set<String> at = CQCodeUtils.getAtWithout(messageVO.getRaw_message());

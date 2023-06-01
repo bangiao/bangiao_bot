@@ -40,7 +40,7 @@ public class UserFilter implements MessageFilter {
     }
     
     @Override
-    public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
+    public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
         
         Long userId = messageVO.getUser_id();
@@ -155,18 +155,4 @@ public class UserFilter implements MessageFilter {
                 .build();
     }
     
-    // register user 2222222222
-    private void register(String senderId, String qq, String type) {
-        User one = userService.getByQQ(qq);
-        if (null == one) {
-            User user = User.builder()
-                    .qq(qq)
-                    .createQq(senderId)
-                    .type(type)
-                    .build();
-            userService.saveOrUpdate(user);
-        } else {
-            throw new NotifyException("该用户已有权限");
-        }
-    }
 }
