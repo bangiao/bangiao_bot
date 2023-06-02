@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * 感谢 chatanywhere/GPT_API_free
  * <p>
- * <a href="https://github.com/chatanywhere/GPT_API_free">感谢 chatanywhere 欢迎大家去 star </a>
+ * <a href="https://github.com/chatanywhere/GPT_API_free">感谢 chatanywhere 欢迎大家去贡献 star </a>
  */
 @Component
 public class ThanksChatRequest implements ChatRequest {
