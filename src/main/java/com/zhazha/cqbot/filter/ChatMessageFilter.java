@@ -100,7 +100,7 @@ public class ChatMessageFilter implements MessageFilter {
                     .reply("你的格式不对")
                     .build();
         }
-        if (!StrUtil.equalsIgnoreCase(userId, Constants.adminQQ)) {
+        if (!StrUtil.equalsIgnoreCase(userId, Constants.ADMIN_QQ)) {
             return ReplyVO.builder()
                     .at_sender(true)
                     .reply("你的权限不够")
@@ -120,7 +120,7 @@ public class ChatMessageFilter implements MessageFilter {
     
     private ReplyVO chatAdd(String rawMessage, Long userId) {
         String code = rawMessage.replace(CMD_CHAT_ADD, "").trim();
-        Config config = configService.getById(Constants.adminQQ);
+        Config config = configService.getById(Constants.ADMIN_QQ);
         if (null == config) {
             config = Config.builder()
                     .id(IdUtil.getSnowflake().nextIdStr())

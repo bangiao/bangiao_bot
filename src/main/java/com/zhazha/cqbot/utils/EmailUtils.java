@@ -12,11 +12,11 @@ import java.io.File;
 public class EmailUtils {
     public static void sendSimpleEmail(String title, String content, String toEmail) throws EmailException {
         SimpleEmail email = new SimpleEmail();
-        email.setHostName(Constants.hostName);
-        email.setSmtpPort(Constants.hostPort);
-        email.setAuthenticator(new DefaultAuthenticator(Constants.fromEmail, Constants.emailPwd));
+        email.setHostName(Constants.HOST_NAME);
+        email.setSmtpPort(Constants.HOST_PORT);
+        email.setAuthenticator(new DefaultAuthenticator(Constants.FROM_EMAIL, Constants.EMAIL_PWD));
         email.setSSLOnConnect(true);
-        email.setFrom(Constants.fromEmail);
+        email.setFrom(Constants.FROM_EMAIL);
         email.setSubject(title);
         email.setMsg(content);
         if (toEmail == null || toEmail.isEmpty()) {
@@ -36,11 +36,11 @@ public class EmailUtils {
 
     public static void sendAttachmentEmail(String title, String content, File file, String toEmail) throws EmailException {
         MultiPartEmail email = new MultiPartEmail();
-        email.setHostName(Constants.hostName);
-        email.setSmtpPort(Constants.hostPort);
-        email.setAuthenticator(new DefaultAuthenticator(Constants.fromEmail, Constants.emailPwd));
+        email.setHostName(Constants.HOST_NAME);
+        email.setSmtpPort(Constants.HOST_PORT);
+        email.setAuthenticator(new DefaultAuthenticator(Constants.FROM_EMAIL, Constants.EMAIL_PWD));
         email.setSSLOnConnect(true);
-        email.setFrom(Constants.fromEmail);
+        email.setFrom(Constants.FROM_EMAIL);
         email.setSubject(title);
         email.setMsg(content);
         if (toEmail == null || toEmail.isEmpty()) {

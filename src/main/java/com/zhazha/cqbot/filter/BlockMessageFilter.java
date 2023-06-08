@@ -38,7 +38,7 @@ public class BlockMessageFilter implements MessageFilter {
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) throws Exception {
         MessageVO messageVO = (MessageVO) vo;
-        if (StrUtil.equalsIgnoreCase(messageVO.getUser_id().toString(), Constants.adminQQ)) {
+        if (StrUtil.equalsIgnoreCase(messageVO.getUser_id().toString(), Constants.ADMIN_QQ)) {
             return chain.doChain(vo, chain);
         }
         User user = userService.get(messageVO.getUser_id());

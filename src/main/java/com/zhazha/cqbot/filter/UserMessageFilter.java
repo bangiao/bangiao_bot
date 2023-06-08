@@ -52,7 +52,7 @@ public class UserMessageFilter implements MessageFilter {
             throw new NotifyException("你没有权限");
         }
         if (!StrUtil.equalsIgnoreCase(sendUser.getType(), UserType.ADMIN.name())
-                && !StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.adminQQ)) {
+                && !StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.ADMIN_QQ)) {
             throw new NotifyException("你没有权限");
         }
         

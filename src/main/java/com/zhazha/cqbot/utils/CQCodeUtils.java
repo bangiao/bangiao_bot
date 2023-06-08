@@ -81,7 +81,7 @@ public class CQCodeUtils {
             if (StrUtil.equalsIgnoreCase(qq, "all")) {
                 continue;
             }
-            if (StrUtil.equalsIgnoreCase(qq, Constants.BotQQ)) {
+            if (StrUtil.equalsIgnoreCase(qq, Constants.BOT_QQ)) {
                 continue;
             }
             stringArrayList.add(qq);

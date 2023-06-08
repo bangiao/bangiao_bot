@@ -69,7 +69,7 @@ public class AdminMessageFilter implements MessageFilter {
     @NotNull
     private Long getSendUserId(MessageVO messageVO) {
         Long sendUserId = messageVO.getUser_id();
-        if (!StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.adminQQ)) {
+        if (!StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.ADMIN_QQ)) {
             throw new NotifyException("你没有权限");
         }
         return sendUserId;

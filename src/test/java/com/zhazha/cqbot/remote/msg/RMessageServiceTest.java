@@ -45,7 +45,7 @@ class RMessageServiceTest {
     
     @Test
     void testSendMessage() {
-        rMessageService.sendMessage(Long.valueOf(Constants.adminQQ),
+        rMessageService.sendMessage(Long.valueOf(Constants.ADMIN_QQ),
                 "Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@25049820]", true);
     }
 }
