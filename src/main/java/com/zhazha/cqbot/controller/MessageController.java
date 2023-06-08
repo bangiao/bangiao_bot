@@ -1,6 +1,5 @@
 package com.zhazha.cqbot.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
 import com.zhazha.cqbot.dispatch.MessageDispatcher;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,12 +25,6 @@ public class MessageController {
 			return ReplyVO.builder().build();
 		}
 		return vo;
-	}
-	
-	private void test(Map<String, Object> maps) {
-		System.out.println("---------------------------------------------------------------");
-		System.out.println(JSONUtil.toJsonStr(maps));
-		System.out.println("---------------------------------------------------------------");
 	}
 	
 }

@@ -7,12 +7,12 @@ import com.zhazha.cqbot.constants.UserType;
 import com.zhazha.cqbot.controller.vo.BaseVO;
 import com.zhazha.cqbot.controller.vo.MessageVO;
 import com.zhazha.cqbot.controller.vo.ReplyVO;
-import com.zhazha.cqbot.exception.BlockException;
 import com.zhazha.cqbot.exception.NotifyException;
 import com.zhazha.cqbot.service.UserService;
 import com.zhazha.cqbot.utils.ReplyUtils;
 import kotlin.Pair;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -33,8 +33,8 @@ public class AdminMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         try {
             MessageVO messageVO = (MessageVO) vo;
-            String raw_message = messageVO.getRaw_message();
-            return StrUtil.startWithIgnoreCase(StrUtil.trimStart(raw_message), Constants.CMD_ADMIN);
+            String raw_message = getRawMessage(messageVO);
+            return StrUtil.startWithIgnoreCase(raw_message, Constants.CMD_ADMIN);
         } catch (Exception ignored) {
         }
         return false;
@@ -44,34 +44,39 @@ public class AdminMessageFilter implements MessageFilter {
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
         
-        Long sendUserId = messageVO.getUser_id();
-        if (!StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.adminQQ)) {
-            throw new NotifyException("你没有权限");
-        }
+        Long sendUserId = getSendUserId(messageVO);
+        String rawMessage = getRawMessage(messageVO);
         
-        String raw_message = StrUtil.trimStart(messageVO.getRaw_message());
-        
-        if (StrUtil.startWithIgnoreCase(raw_message,CMD_ADMIN_ADD)) {
+        if (StrUtil.startWithIgnoreCase(rawMessage, CMD_ADMIN_ADD)) {
             // 用户注册
-            return addAdmin(sendUserId, raw_message);
-        } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_ADMIN_GET)) {
+            return addAdmin(sendUserId, rawMessage);
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_ADMIN_GET)) {
             // 读取
-            return getAdmin(raw_message);
-        } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_ADMIN_BLK)) {
+            return getAdmin(rawMessage);
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_ADMIN_BLK)) {
             // 拉黑
             return blockAdmin(messageVO);
-        } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_ADMIN_LIST)) {
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_ADMIN_LIST)) {
             // 列出授权列表
             return listAdmin();
-        } else if (StrUtil.startWithIgnoreCase(raw_message, CMD_ADMIN_DEL)) {
+        } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_ADMIN_DEL)) {
             // 删除
-            return deleteAdmin(raw_message);
+            return deleteAdmin(rawMessage);
         }
         return ReplyUtils.build("指令不正确\n");
     }
     
+    @NotNull
+    private Long getSendUserId(MessageVO messageVO) {
+        Long sendUserId = messageVO.getUser_id();
+        if (!StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.adminQQ)) {
+            throw new NotifyException("你没有权限");
+        }
+        return sendUserId;
+    }
+    
     private ReplyVO deleteAdmin(String raw_message) {
-        String qq = raw_message.replaceFirst(CMD_ADMIN_DEL, "").trim();
+        String qq = getQq(raw_message, CMD_ADMIN_DEL);
         if (StrUtil.isBlank(qq)) {
             return ReplyUtils.build("没有该用户");
         }
@@ -85,7 +90,7 @@ public class AdminMessageFilter implements MessageFilter {
     }
     
     private ReplyVO getAdmin(String raw_message) {
-        String qq = raw_message.replaceFirst(CMD_ADMIN_GET, "").trim();
+        String qq = getQq(raw_message, CMD_ADMIN_GET);
         User user = userService.getAdmin(qq);
         if (user == null) {
             return ReplyUtils.build("没有数据");
@@ -94,30 +99,33 @@ public class AdminMessageFilter implements MessageFilter {
     }
     
     private ReplyVO blockAdmin(MessageVO messageVO) {
-        String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
-        String qq = rawMessage.replaceFirst(CMD_ADMIN_BLK, "").trim();
+        String rawMessage = getRawMessage(messageVO);
+        String qq = getQq(rawMessage, CMD_ADMIN_BLK);
+        User user = getAdmin(messageVO, qq);
+        user.setType(UserType.BLOCK.name());
+        userService.saveOrUpdate(user);
+        return ReplyUtils.build("拉黑成功");
+    }
+    
+    private User getAdmin(MessageVO messageVO, String qq) {
         User user = userService.getAdmin(qq);
         if (null == user) {
             user = User.builder().qq(qq)
                     .createQq(messageVO.getUser_id().toString())
                     .build();
         }
-        user.setType(UserType.BLOCK.name());
-        userService.saveOrUpdate(user);
-        return ReplyUtils.build("拉黑成功");
+        return user;
+    }
+    
+    @NotNull
+    private String getQq(String rawMessage, String cmd) {
+        return rawMessage.replaceFirst(cmd, "").trim();
     }
     
     private ReplyVO addAdmin(Long userId, String raw_message) {
-        // 被注册用户是否是黑名单用户
         // 被注册用户是否已经注册
-        String qq = raw_message.replace(CMD_ADMIN_ADD, "").trim();
-        User one = userService.get(qq);
-        if (one != null) {
-            if (StrUtil.equalsIgnoreCase(one.getType(), UserType.BLOCK.name())) {
-                throw new BlockException("您是黑名单用户, 请联系管理员!!!");
-            }
-            throw new NotifyException("该用户已注册");
-        }
+        String qq = getQq(raw_message, CMD_ADMIN_ADD);
+        addCheck(qq);
         User user = User.builder()
                 .type(UserType.ADMIN.name())
                 .createQq(userId.toString())
@@ -125,5 +133,12 @@ public class AdminMessageFilter implements MessageFilter {
                 .build();
         userService.saveOrUpdate(user);
         return ReplyUtils.build("注册成功");
+    }
+    
+    private void addCheck(String qq) {
+        User one = userService.get(qq);
+        if (one != null) {
+            throw new NotifyException("该用户已注册");
+        }
     }
 }

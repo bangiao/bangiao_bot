@@ -42,13 +42,13 @@ public class ChatMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         // 强调只能在私聊找执行该指令
         MessageVO messageVO = (MessageVO) vo;
-        return StrUtil.startWithIgnoreCase(StrUtil.trimStart(messageVO.getRaw_message()), Constants.CMD_CHAT);
+        return StrUtil.startWithIgnoreCase(getRawMessage(messageVO), Constants.CMD_CHAT);
     }
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
-        String rawMessage = StrUtil.trimStart(messageVO.getRaw_message());
+        String rawMessage = getRawMessage(messageVO);
         Long userId = messageVO.getUser_id();
         
         if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_ADD)) {
@@ -67,15 +67,19 @@ public class ChatMessageFilter implements MessageFilter {
             // 列表
             return help();
         } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_OL)) {
-            String msg = rawMessage.replace(CMD_CHAT_OL, "");
-            messageVO.setRaw_message(msg);
-            String response = chatEngine.execute(messageVO);
-            return ReplyVO.builder()
-                    .at_sender(true)
-                    .reply(response)
-                    .build();
+            return messageEmit(messageVO, rawMessage);
         }
         return ReplyUtils.build("指令不正确\n");
+    }
+    
+    private ReplyVO messageEmit(MessageVO messageVO, String rawMessage) {
+        String msg = rawMessage.replace(CMD_CHAT_OL, "");
+        messageVO.setRaw_message(msg);
+        String response = chatEngine.execute(messageVO);
+        return ReplyVO.builder()
+                .at_sender(true)
+                .reply(response)
+                .build();
     }
     
     private ReplyVO help() {

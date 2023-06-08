@@ -35,8 +35,8 @@ public class UserMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         try {
             MessageVO messageVO = (MessageVO) vo;
-            String raw_message = messageVO.getRaw_message();
-            return StrUtil.startWithIgnoreCase(StrUtil.trimStart(raw_message), Constants.CMD_USER);
+            String raw_message = getRawMessage(messageVO);
+            return StrUtil.startWithIgnoreCase(raw_message, Constants.CMD_USER);
         } catch (Exception ignored) {
         }
         return false;
@@ -56,7 +56,7 @@ public class UserMessageFilter implements MessageFilter {
             throw new NotifyException("你没有权限");
         }
         
-        String raw_message = StrUtil.trimStart(messageVO.getRaw_message());
+        String raw_message = getRawMessage(messageVO);
         
         if (StrUtil.startWithIgnoreCase(raw_message, CMD_USER_ADD)) {
             // 用户注册
