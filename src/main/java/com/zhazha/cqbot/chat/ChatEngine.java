@@ -37,7 +37,7 @@ public class ChatEngine {
 			if (!chatRequest.match(config.getName())) {
 				continue;
 			}
-			return chatRequest.request(vo.getUser_id(), s);
+			return chatRequest.request(s);
 		}
 		throw new NotifyException("没有符合的 chat gpt 节点");
 	}

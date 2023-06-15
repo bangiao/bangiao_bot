@@ -6,6 +6,6 @@ public interface ChatRequest {
 	
 	Boolean match(String key);
 	
-	String request(Long qq, String question) throws ChatException;
+	String request(String question) throws ChatException;
 	
 }
