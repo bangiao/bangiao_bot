@@ -37,7 +37,7 @@ public class ThanksChatRequest implements ChatRequest {
     }
     
     @Override
-    public String request(Long qq, String question) throws ChatException {
+    public String request(String question) throws ChatException {
         try {
             Integer lock = lockMap.putIfAbsent(question.hashCode(), 1);
             if (null != lock) {
@@ -74,7 +74,7 @@ public class ThanksChatRequest implements ChatRequest {
             Message message = Message.of(question + " 用汉语回答");
 
             ChatCompletion chatCompletion = ChatCompletion.builder()
-                    .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
+                    .model("gpt-3.5-turbo-0613")
                     .messages(Arrays.asList(message, system))
                     .maxTokens(3000)
                     .temperature(0.9)
