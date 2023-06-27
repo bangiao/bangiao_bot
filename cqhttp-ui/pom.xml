@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.zhazha.dispatcher</groupId>
-    <artifactId>cqhttp-ui-dispatcher</artifactId>
+    <artifactId>cqhttp-ui</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

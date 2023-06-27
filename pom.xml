@@ -15,7 +15,7 @@
     <name>cqhttp_bot</name>
     <description>这是一个qq机器人</description>
     <modules>
-        <module>cqhttp-ui-dispatcher</module>
+        <module>cqhttp-ui</module>
         <module>cqhttp-infrastructure</module>
     </modules>
     <properties>
