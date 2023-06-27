@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhazha.cqbot.mapper.ConfigMapper">
+  <resultMap id="BaseResultMap" type="com.zhazha.cqhttp.bean.Config">
+    <!--@mbg.generated-->
+    <!--@Table config-->
+    <id column="id" jdbcType="LONGVARCHAR" property="id" />
+    <result column="name" jdbcType="LONGVARCHAR" property="name" />
+    <result column="value1" jdbcType="LONGVARCHAR" property="value1" />
+    <result column="value2" jdbcType="LONGVARCHAR" property="value2" />
+    <result column="value3" jdbcType="LONGVARCHAR" property="value3" />
+    <result column="desc" jdbcType="LONGVARCHAR" property="desc" />
+    <result column="type" jdbcType="LONGVARCHAR" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, "name", value1, value2, value3, "desc", "type", "status"
+  </sql>
+</mapper>
