@@ -1,7 +1,6 @@
 package com.zhazha.cqbot.config;
 
 import cn.hutool.extra.spring.EnableSpringUtil;
-import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.zhazha.cqbot.filter.AdminMessageFilter;
 import com.zhazha.cqbot.filter.BlockMessageFilter;
 import com.zhazha.cqbot.filter.MessageFilterChain;
@@ -36,14 +35,4 @@ public class GlobalConfig {
         messageFilterChain.addFilter(blockMessageFilter());
         return messageFilterChain;
     }
-    
-    @Bean
-    public SensitiveWordBs sensitiveWordBs() {
-        return SensitiveWordBs.newInstance()
-//			    .wordDeny(new MyWordDeny())
-                .ignoreRepeat(false)
-                .enableUrlCheck(false)
-                .init();
-    }
-    
 }

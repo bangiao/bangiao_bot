@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.config;
+package com.zhazha.cqhttp.config;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.github.houbb.sensitive.word.api.IWordDeny;

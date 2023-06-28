@@ -14,8 +14,8 @@ import java.util.Map;
 @Component("message")
 public class MessageHandler implements IMessageHandler {
     
-        @Resource
-        private FilterChainManager filterChainManager;
+    @Resource
+    private FilterChainManager filterChainManager;
     
     @Nullable
     @Override

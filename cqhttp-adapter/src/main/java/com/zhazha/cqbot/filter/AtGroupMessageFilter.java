@@ -1,7 +1,7 @@
 package com.zhazha.cqbot.filter;
 
 import cn.hutool.core.util.StrUtil;
-import com.zhazha.cqbot.chat.ChatEngine;
+import com.zhazha.cqhttp.chat.ChatEngine;
 import com.zhazha.cqhttp.constants.Constants;
 import com.zhazha.cqhttp.utils.CQCodeUtils;
 import com.zhazha.cqhttp.vo.BaseVO;

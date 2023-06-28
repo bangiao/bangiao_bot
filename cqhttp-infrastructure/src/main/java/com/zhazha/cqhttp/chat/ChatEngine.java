@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.chat;
+package com.zhazha.cqhttp.chat;
 
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.zhazha.cqhttp.bean.Config;

@@ -3,7 +3,6 @@ package com.zhazha.cqbot.controller;
 import com.zhazha.cqbot.dispatch.MessageDispatcher;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ public class MessageController {
 	private MessageDispatcher messageDispatcher;
 	
 	@RequestMapping("")
-	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) throws Exception {
 		ReplyVO vo = messageDispatcher.dispatch(maps);
 		if (vo == null) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
