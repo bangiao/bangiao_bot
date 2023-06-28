@@ -7,12 +7,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhazha.cqhttp.bean.User;
 import com.zhazha.cqhttp.constants.UserType;
 import com.zhazha.cqhttp.mapper.UserMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@Repository
 public class UserRepository extends ServiceImpl<UserMapper, User> {
     
     /**

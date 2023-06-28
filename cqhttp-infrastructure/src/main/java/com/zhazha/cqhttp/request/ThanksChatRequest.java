@@ -71,7 +71,7 @@ public class ThanksChatRequest implements ChatRequest {
                     .init();
 
             Message system = Message.ofSystem("Let's think step by step");
-            Message message = Message.of(question + " 用汉语回答");
+            Message message = Message.of(question + " 用中文回答");
 
             ChatCompletion chatCompletion = ChatCompletion.builder()
                     .model("gpt-3.5-turbo-0613")

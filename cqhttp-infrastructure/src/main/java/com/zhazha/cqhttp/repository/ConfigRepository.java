@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhazha.cqhttp.bean.Config;
 import com.zhazha.cqhttp.constants.ConfigType;
 import com.zhazha.cqhttp.mapper.ConfigMapper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Repository
 public class ConfigRepository extends ServiceImpl<ConfigMapper, Config> {
     
     public List<Config> listByQQ(Long qq) {

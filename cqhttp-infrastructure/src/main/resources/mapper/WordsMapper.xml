@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhazha.cqbot.mapper.WordsMapper">
-  <resultMap id="BaseResultMap" type="com.zhazha.cqhttp.bean.Words">
-    <!--@mbg.generated-->
-    <!--@Table words-->
-    <result column="word" jdbcType="LONGVARCHAR" property="word" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    word
-  </sql>
+<mapper namespace="com.zhazha.cqhttp.mapper.WordsMapper">
+    <resultMap id="BaseResultMap" type="com.zhazha.cqhttp.bean.Words">
+        <!--@mbg.generated-->
+        <!--@Table words-->
+        <result column="word" jdbcType="LONGVARCHAR" property="word"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        word
+    </sql>
 </mapper>
