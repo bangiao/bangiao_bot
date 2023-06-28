@@ -1,9 +1,12 @@
 package com.zhazha.cqhttp.vo;
 
+import com.alibaba.cola.dto.DTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class BaseVO {
+public class BaseVO extends DTO {
 
 //	time	int64	-	事件发生的unix时间戳
 //	self_id	int64	-	收到事件的机器人的 QQ 号

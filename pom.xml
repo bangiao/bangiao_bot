@@ -15,7 +15,7 @@
     <name>cqhttp_bot</name>
     <description>这是一个qq机器人</description>
     <modules>
-        <module>cqhttp-ui</module>
+        <module>cqhttp-adapter</module>
         <module>cqhttp-infrastructure</module>
     </modules>
     <properties>
@@ -25,6 +25,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba.cola</groupId>
+                <artifactId>cola-components-bom</artifactId>
+                <version>4.3.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

@@ -1,9 +1,8 @@
 package com.zhazha.cqhttp.exception;
 
-public class ChatException extends RuntimeException {
-	public ChatException() {
-	}
-	
+import com.alibaba.cola.exception.BizException;
+
+public class ChatException extends BizException {
 	public ChatException(String message) {
 		super(message);
 	}

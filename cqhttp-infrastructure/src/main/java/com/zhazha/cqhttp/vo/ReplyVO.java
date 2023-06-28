@@ -1,15 +1,14 @@
 package com.zhazha.cqhttp.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.alibaba.cola.dto.DTO;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ReplyVO {
+public class ReplyVO extends DTO {
 	private String reply;
 	private Boolean auto_escape;
 	private Boolean at_sender;
