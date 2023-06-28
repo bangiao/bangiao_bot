@@ -29,3 +29,4 @@ replay_pid*
 /src/main/resources/email.yml
 /src/test/java/com/zhazha/cqbot/PatternTest.java
 /src/test/java/com/zhazha/cqbot/exec/EmailExecuteTest.java
+**/*.iml
