@@ -1,5 +1,6 @@
 package com.zhazha.cqbot.config;
 
+import cn.hutool.extra.spring.EnableSpringUtil;
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
 import com.zhazha.cqbot.filter.AdminMessageFilter;
 import com.zhazha.cqbot.filter.BlockMessageFilter;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
+@EnableSpringUtil
 public class GlobalConfig {
     
     @Bean
