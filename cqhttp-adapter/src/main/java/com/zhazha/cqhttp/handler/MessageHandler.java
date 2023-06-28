@@ -1,7 +1,7 @@
-package com.zhazha.cqbot.handler;
+package com.zhazha.cqhttp.handler;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.zhazha.cqbot.filter.FilterChainManager;
+import com.zhazha.cqhttp.filter.FilterChainManager;
 import com.zhazha.cqhttp.vo.MessageVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;

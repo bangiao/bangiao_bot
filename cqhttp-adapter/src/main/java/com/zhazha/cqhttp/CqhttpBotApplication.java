@@ -1,4 +1,4 @@
-package com.zhazha.cqbot;
+package com.zhazha.cqhttp;
 
 import com.zhazha.cqhttp.constants.Constants;
 import org.springframework.boot.SpringApplication;

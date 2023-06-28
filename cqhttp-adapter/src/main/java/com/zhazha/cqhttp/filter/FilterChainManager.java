@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.filter;
+package com.zhazha.cqhttp.filter;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;

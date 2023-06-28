@@ -1,10 +1,10 @@
-package com.zhazha.cqbot.config;
+package com.zhazha.cqhttp.config;
 
 import cn.hutool.extra.spring.EnableSpringUtil;
-import com.zhazha.cqbot.filter.AdminMessageFilter;
-import com.zhazha.cqbot.filter.BlockMessageFilter;
-import com.zhazha.cqbot.filter.MessageFilterChain;
 import com.zhazha.cqhttp.constants.Constants;
+import com.zhazha.cqhttp.filter.AdminMessageFilter;
+import com.zhazha.cqhttp.filter.BlockMessageFilter;
+import com.zhazha.cqhttp.filter.MessageFilterChain;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;

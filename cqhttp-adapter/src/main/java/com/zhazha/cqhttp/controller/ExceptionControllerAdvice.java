@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.controller;
+package com.zhazha.cqhttp.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.zhazha.cqhttp.exception.BlockException;

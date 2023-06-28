@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.handler;
+package com.zhazha.cqhttp.handler;
 
 import com.zhazha.cqhttp.vo.ReplyVO;
 import org.jetbrains.annotations.NotNull;

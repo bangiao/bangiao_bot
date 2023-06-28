@@ -96,7 +96,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                    <mainClass>com.zhazha.cqbot.CqhttpBotApplication</mainClass>
+                    <mainClass>com.zhazha.cqhttp.CqhttpBotApplication</mainClass>
                     <imageName>cqhttp_bot</imageName>
                 </configuration>
             </plugin>

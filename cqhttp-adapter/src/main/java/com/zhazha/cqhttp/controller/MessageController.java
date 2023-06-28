@@ -1,6 +1,6 @@
-package com.zhazha.cqbot.controller;
+package com.zhazha.cqhttp.controller;
 
-import com.zhazha.cqbot.dispatch.MessageDispatcher;
+import com.zhazha.cqhttp.dispatch.MessageDispatcher;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;

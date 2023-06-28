@@ -1,8 +1,8 @@
-package com.zhazha.cqbot.dispatch;
+package com.zhazha.cqhttp.dispatch;
 
 import cn.hutool.core.util.StrUtil;
-import com.zhazha.cqbot.handler.IMessageHandler;
-import com.zhazha.cqbot.handler.MetaEventIMessageHandler;
+import com.zhazha.cqhttp.handler.IMessageHandler;
+import com.zhazha.cqhttp.handler.MetaEventIMessageHandler;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;

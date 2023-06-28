@@ -1,4 +1,4 @@
-package com.zhazha.cqbot.filter;
+package com.zhazha.cqhttp.filter;
 
 import cn.hutool.core.collection.CollUtil;
 import com.zhazha.cqhttp.exception.NotifyException;
