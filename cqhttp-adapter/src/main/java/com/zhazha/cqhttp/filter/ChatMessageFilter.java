@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -41,13 +40,13 @@ public class ChatMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         // 强调只能在私聊找执行该指令
         MessageVO messageVO = (MessageVO) vo;
-        return StrUtil.startWithIgnoreCase(getRawMessage(messageVO), Constants.CMD_CHAT);
+        return StrUtil.startWithIgnoreCase(messageVO.getRaw_message(), Constants.CMD_CHAT);
     }
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
         MessageVO messageVO = (MessageVO) vo;
-        String rawMessage = getRawMessage(messageVO);
+        String rawMessage = messageVO.getRaw_message();
         Long userId = messageVO.getUser_id();
         
         if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_ADD)) {
@@ -109,7 +108,7 @@ public class ChatMessageFilter implements MessageFilter {
         String s = configList.stream().map(config ->
                         new Triple(config.getId(), config.getValue1(), config.getValue2())
                 )
-                .collect(Collectors.toList())
+                .toList()
                 .toString();
         return ReplyVO.builder()
                 .at_sender(true)
@@ -160,7 +159,7 @@ public class ChatMessageFilter implements MessageFilter {
         String s = configs.stream().map(config ->
                         new Triple(config.getId(), config.getValue1(), config.getValue2())
                 )
-                .collect(Collectors.toList())
+                .toList()
                 .toString();
         return ReplyVO.builder()
                 .at_sender(true)

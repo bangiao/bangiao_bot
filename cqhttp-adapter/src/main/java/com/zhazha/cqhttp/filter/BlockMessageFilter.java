@@ -28,7 +28,7 @@ public class BlockMessageFilter implements MessageFilter {
     public Boolean match(BaseVO vo) {
         MessageVO messageVO = (MessageVO) vo;
         for (String cmd : commands) {
-            if (StrUtil.containsIgnoreCase(getRawMessage(messageVO), cmd)) {
+            if (StrUtil.containsIgnoreCase(messageVO.getRaw_message(), cmd)) {
                 return true;
             }
         }
