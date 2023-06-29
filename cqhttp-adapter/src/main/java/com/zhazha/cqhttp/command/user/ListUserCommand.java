@@ -24,11 +24,6 @@ public class ListUserCommand implements UserCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(UserMessage userMessage) {
         List<User> list = userRepository.listUser();
         return ReplyVO.build(Arrays.toString(

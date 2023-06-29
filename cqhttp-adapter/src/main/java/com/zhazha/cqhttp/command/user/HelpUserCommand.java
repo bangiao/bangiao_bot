@@ -16,11 +16,6 @@ public class HelpUserCommand implements UserCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(UserMessage userMessage) {
         List<String> allCmd = CmdUserEnum.getAllCmd();
         return ReplyVO.build(StrJoiner.of("\n").append(allCmd).toString());

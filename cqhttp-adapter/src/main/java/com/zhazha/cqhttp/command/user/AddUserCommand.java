@@ -24,11 +24,6 @@ public class AddUserCommand implements UserCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(UserMessage userMessage) {
         String rawMessage = userMessage.getRaw_message();
         Long userId = userMessage.getUser_id();

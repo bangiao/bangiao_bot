@@ -19,11 +19,6 @@ public class DeleteAdminCommand implements AdminCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(AdminMessage adminMessage) {
         String qq = adminMessage.getQq(getMode().getCmd());
         if (StrUtil.isBlank(qq)) {

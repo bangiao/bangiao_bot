@@ -24,11 +24,6 @@ public class ListAdminCommand implements AdminCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(AdminMessage adminMessage) {
         List<User> list = userRepository.list();
         return ReplyVO.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()));

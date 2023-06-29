@@ -22,11 +22,6 @@ public class AddAdminCommand implements AdminCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(AdminMessage adminMessage) {
         // 被注册用户是否已经注册
         String qq = adminMessage.getQq(getMode().getCmd());

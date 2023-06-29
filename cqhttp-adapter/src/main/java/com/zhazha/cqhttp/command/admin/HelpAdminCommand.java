@@ -14,11 +14,6 @@ public class HelpAdminCommand implements AdminCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(AdminMessage adminMessage) {
         return ReplyVO.build(StrJoiner.of("\n").append(CmdAdminEnum.getAllCmd()).toString());
     }

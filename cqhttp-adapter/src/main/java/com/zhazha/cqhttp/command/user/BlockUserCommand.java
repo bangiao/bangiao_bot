@@ -24,11 +24,6 @@ public class BlockUserCommand implements UserCommand {
     }
     
     @Override
-    public boolean matches(String rawMessage) {
-        return getMode().match(rawMessage);
-    }
-    
-    @Override
     public ReplyVO execute(UserMessage userMessage) {
         // 你的权限是否大于即将操作的权限?
         User sendUser = checkSendUserPermission(userMessage);

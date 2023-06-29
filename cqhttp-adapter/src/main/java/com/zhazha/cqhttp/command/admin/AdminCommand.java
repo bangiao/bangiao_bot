@@ -6,6 +6,10 @@ import com.zhazha.cqhttp.vo.ReplyVO;
 
 public interface AdminCommand {
     CmdAdminEnum getMode();
-    boolean matches(String rawMessage);
+    
     ReplyVO execute(AdminMessage adminMessage);
+    
+    default boolean matches(String rawMessage) {
+        return getMode().match(rawMessage);
+    }
 }
