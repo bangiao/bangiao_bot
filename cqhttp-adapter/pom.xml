@@ -4,12 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.zhazha.cqbot</groupId>
+        <groupId>com.zhazha.cqhttp</groupId>
         <artifactId>cqhttp_bot</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.zhazha.dispatcher</groupId>
     <artifactId>cqhttp-adapter</artifactId>
 
     <properties>
@@ -20,13 +19,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.zhazha.infrastructure</groupId>
+            <groupId>com.zhazha.cqhttp</groupId>
             <artifactId>cqhttp-infra-persistence</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -54,6 +49,10 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -72,21 +71,5 @@
             <artifactId>chatgpt</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <compilerArgs>
-<!--                        openfeign的问题, 需要添加编译参数-->
-                        <arg>-parameters</arg>
-                    </compilerArgs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
