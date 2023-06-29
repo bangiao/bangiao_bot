@@ -1,6 +1,7 @@
 package com.zhazha.cqhttp.vo;
 
 import cn.hutool.core.util.StrUtil;
+import com.zhazha.cqhttp.constants.CmdChatEnum;
 import com.zhazha.cqhttp.exception.NotifyException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,4 +18,9 @@ public class AdminMessage extends UserMessage {
         return qq;
     }
     
+    @Override
+    public String getRaw_message() {
+        return super.getRaw_message()
+                .replace(CmdChatEnum.CMD_CHAT_ADD.getCmd(), "").trim();
+    }
 }

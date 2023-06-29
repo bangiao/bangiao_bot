@@ -8,5 +8,4 @@ public interface AdminCommand {
     CmdAdminEnum getMode();
     boolean matches(String rawMessage);
     ReplyVO execute(AdminMessage adminMessage);
-    
 }
