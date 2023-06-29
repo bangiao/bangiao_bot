@@ -6,11 +6,10 @@ import com.zhazha.cqhttp.remote.msg.result.GetMsgResult;
 import com.zhazha.cqhttp.remote.msg.result.SendMsgResult;
 import com.zhazha.cqhttp.utils.EmailUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
-@Component
+//@Component
 public class RMessageServiceFallback implements RMessageService {
 
 	@Override

@@ -2,6 +2,7 @@ package com.zhazha.cqhttp.command.chat;
 
 import com.zhazha.cqhttp.chat.ChatEngine;
 import com.zhazha.cqhttp.constants.CmdChatEnum;
+import com.zhazha.cqhttp.remote.msg.RMessageService;
 import com.zhazha.cqhttp.vo.AdminMessage;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class SendMsgChatCommand implements ChatCommand {
     @Resource
     private ChatEngine chatEngine;
+    @Resource
+    private RMessageService rMessageService;
     
     @Override
     public CmdChatEnum getMode() {
@@ -23,9 +26,11 @@ public class SendMsgChatCommand implements ChatCommand {
         String msg = rawMessage.replace(getMode().getCmd(), "");
         adminMessage.setRaw_message(msg);
         String response = chatEngine.execute(adminMessage);
+        rMessageService.sendMessage(adminMessage.getUser_id(), response,
+                false);
         return ReplyVO.builder()
-                .at_sender(true)
-                .reply(response)
+//                .at_sender(true)
+//                .reply(response)
                 .build();
     }
 }

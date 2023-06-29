@@ -1,13 +1,13 @@
 package com.zhazha.cqhttp.remote.images;
 
 
-import com.zhazha.cqhttp.remote.images.fallback.RImagesServiceFallback;
 import com.zhazha.cqhttp.remote.images.result.ImageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "images", url = "${feign.customer.url}", fallback = RImagesServiceFallback.class)
+@FeignClient(name = "images", url = "${feign.customer.url}")
+//@FeignClient(name = "images", url = "${feign.customer.url}", fallback = RImagesServiceFallback.class)
 public interface RImagesService {
 	
 	/**

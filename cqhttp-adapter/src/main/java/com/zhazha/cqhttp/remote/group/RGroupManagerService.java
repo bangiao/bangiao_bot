@@ -1,13 +1,13 @@
 package com.zhazha.cqhttp.remote.group;
 
 
-import com.zhazha.cqhttp.remote.group.fallback.RGroupManagerServiceFallback;
 import com.zhazha.cqhttp.remote.group.result.GroupNoticeResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "group-manager", url = "${feign.customer.url}", fallback = RGroupManagerServiceFallback.class)
+@FeignClient(name = "group-manager", url = "${feign.customer.url}")
+//@FeignClient(name = "group-manager", url = "${feign.customer.url}", fallback = RGroupManagerServiceFallback.class)
 public interface RGroupManagerService {
 	/**
 	 * 处理加群请求／邀请

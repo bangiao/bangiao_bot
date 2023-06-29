@@ -4,9 +4,8 @@ import com.zhazha.cqhttp.remote.group.RGroupInfoService;
 import com.zhazha.cqhttp.remote.group.result.*;
 import com.zhazha.cqhttp.utils.EmailUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @Slf4j
 public class RGroupInfoServiceFallback implements RGroupInfoService {
 	

@@ -3,6 +3,7 @@ package com.zhazha.cqhttp.config;
 import cn.hutool.extra.spring.EnableSpringUtil;
 import com.zhazha.cqhttp.constants.Constants;
 import com.zhazha.cqhttp.filter.AdminMessageFilter;
+import com.zhazha.cqhttp.filter.AllHelpMessageFilter;
 import com.zhazha.cqhttp.filter.BlockMessageFilter;
 import com.zhazha.cqhttp.filter.MessageFilterChain;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,11 @@ public class GlobalConfig {
     }
     
     @Bean
+    public AllHelpMessageFilter allHelpMessageFilter() {
+        return new AllHelpMessageFilter();
+    }
+    
+    @Bean
     public BlockMessageFilter blockMessageFilter() {
         BlockMessageFilter messageFilter = new BlockMessageFilter();
         messageFilter.addUrl(Constants.CMD_USER);
@@ -31,6 +37,7 @@ public class GlobalConfig {
     @Bean
     public MessageFilterChain messageFilterChain() {
         MessageFilterChain messageFilterChain = new MessageFilterChain();
+        messageFilterChain.addFilter(allHelpMessageFilter());
         messageFilterChain.addFilter(adminMessageFilter());
         messageFilterChain.addFilter(blockMessageFilter());
         return messageFilterChain;

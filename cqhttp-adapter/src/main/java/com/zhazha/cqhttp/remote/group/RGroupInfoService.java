@@ -1,12 +1,12 @@
 package com.zhazha.cqhttp.remote.group;
 
-import com.zhazha.cqhttp.remote.group.fallback.RGroupInfoServiceFallback;
 import com.zhazha.cqhttp.remote.group.result.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "group", url = "${feign.customer.url}", fallback = RGroupInfoServiceFallback.class)
+@FeignClient(name = "group", url = "${feign.customer.url}")
+//@FeignClient(name = "group", url = "${feign.customer.url}", fallback = RGroupInfoServiceFallback.class)
 public interface RGroupInfoService {
 	
 	/**

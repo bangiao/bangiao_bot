@@ -1,6 +1,5 @@
 package com.zhazha.cqhttp.remote.msg;
 
-import com.zhazha.cqhttp.remote.msg.fallback.RMessageServiceFallback;
 import com.zhazha.cqhttp.remote.msg.result.GetForwardMsgResult;
 import com.zhazha.cqhttp.remote.msg.result.GetMsgResult;
 import com.zhazha.cqhttp.remote.msg.result.SendMsgResult;
@@ -8,7 +7,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "message", url = "${feign.customer.url}", fallback = RMessageServiceFallback.class)
+@FeignClient(name = "message", url = "${feign.customer.url}")
+//@FeignClient(name = "message", url = "${feign.customer.url}", fallback = RMessageServiceFallback.class)
 public interface RMessageService {
 	
 	/**
@@ -21,7 +21,7 @@ public interface RMessageService {
 	 */
 	@GetMapping(value = "/send_private_msg")
     SendMsgResult sendMessage(@RequestParam Long user_id, @RequestParam String message,
-							  @RequestParam(required = false, defaultValue = "true") Boolean auto_escape);
+							  @RequestParam(required = false) Boolean auto_escape);
 	
 	/**
 	 * 发送群消息
@@ -31,7 +31,9 @@ public interface RMessageService {
 	 * @return
 	 */
 	@GetMapping("/send_group_msg")
-	SendMsgResult sendGroupMsg(@RequestParam Long group_id, @RequestParam String message, @RequestParam Boolean auto_escape);
+	SendMsgResult sendGroupMsg(@RequestParam Long group_id,
+							   @RequestParam String message,
+							   @RequestParam Boolean auto_escape);
 	
 	/**
 	 * 根据消息id拿到相关数据

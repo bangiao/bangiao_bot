@@ -37,6 +37,7 @@ public class AtGroupMessageFilter implements MessageFilter {
         
         // [CQ:at,qq=222222] [CQ:at,qq=11111] 开始
         String message = buildMessage(at, response);
+        // TODO: 2023/6/29 群 消息问题
         return ReplyVO.builder().reply(message).at_sender(true).build();
     }
     

@@ -1,14 +1,13 @@
 package com.zhazha.cqhttp.constants;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Constants {
     
     /**
      * email
      */
-    public static final String URL = "https://api.chatanywhere.com.cn";
     public static final String CMD_USER = "u ";
     public static final String CMD_ADMIN = "a ";
     public static final String CMD_CHAT = "#";
@@ -17,9 +16,7 @@ public class Constants {
     public static final int HOST_PORT = 465;
     public static String ADMIN_QQ;
     public static String BOT_QQ;
-    public static final String AT_BOT = "[CQ:at,qq=" + Constants.BOT_QQ + "]";
-    public static String FROM_EMAIL = BOT_QQ;
-    public static final List<String> toEmail = new ArrayList<>() {{
-        add(ADMIN_QQ);
-    }};
+    public static String AT_BOT;
+    public static String FROM_EMAIL;
+    public static Set<String> toEmail = new HashSet<>();
 }

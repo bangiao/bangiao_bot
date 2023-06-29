@@ -1,13 +1,13 @@
 package com.zhazha.cqhttp.remote.friend;
 
-import com.zhazha.cqhttp.remote.friend.fallback.RFriendServiceFallback;
 import com.zhazha.cqhttp.remote.friend.result.FriendResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(name = "friend", url = "${feign.customer.url}", fallback = RFriendServiceFallback.class)
+@FeignClient(name = "friend", url = "${feign.customer.url}")
+//@FeignClient(name = "friend", url = "${feign.customer.url}", fallback = RFriendServiceFallback.class)
 public interface RFriendService {
 	
 	/**
