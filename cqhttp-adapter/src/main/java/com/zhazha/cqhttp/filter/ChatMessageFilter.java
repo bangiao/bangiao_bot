@@ -1,5 +1,6 @@
 package com.zhazha.cqhttp.filter;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqhttp.command.chat.ChatCommandExecutor;
 import com.zhazha.cqhttp.constants.Constants;
@@ -26,7 +27,8 @@ public class ChatMessageFilter implements MessageFilter {
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
-        AdminMessage messageVO = (AdminMessage) vo;
-        return chatCommandExecutor.executeCommand(messageVO);
+        MessageVO messageVO = (MessageVO) vo;
+        AdminMessage adminMessage = BeanUtil.toBean(messageVO, AdminMessage.class);
+        return chatCommandExecutor.executeCommand(adminMessage);
     }
 }

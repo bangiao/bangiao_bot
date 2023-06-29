@@ -1,10 +1,12 @@
 package com.zhazha.cqhttp.filter;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqhttp.chat.ChatEngine;
 import com.zhazha.cqhttp.constants.Constants;
 import com.zhazha.cqhttp.utils.CQCodeUtils;
 import com.zhazha.cqhttp.vo.BaseVO;
+import com.zhazha.cqhttp.vo.MessageVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import com.zhazha.cqhttp.vo.UserMessage;
 import jakarta.annotation.Resource;
@@ -20,14 +22,15 @@ public class AtGroupMessageFilter implements MessageFilter {
     
     @Override
     public Boolean match(BaseVO vo) {
-        UserMessage userMessage = (UserMessage) vo;
-        String raw_message = userMessage.getRaw_message();
+        MessageVO messageVO = (MessageVO) vo;
+        String raw_message = messageVO.getRaw_message();
         return StrUtil.containsIgnoreCase(raw_message, Constants.AT_BOT);
     }
     
     @Override
     public ReplyVO doFilter(BaseVO vo, MessageFilterChain chain) {
-        UserMessage userMessage = (UserMessage) vo;
+        MessageVO messageVO = (MessageVO) vo;
+        UserMessage userMessage = BeanUtil.toBean(messageVO, UserMessage.class);
         Set<String> at = CQCodeUtils.getAtWithout(userMessage.getRaw_message());
         
         String response = chatEngine.execute(userMessage);
