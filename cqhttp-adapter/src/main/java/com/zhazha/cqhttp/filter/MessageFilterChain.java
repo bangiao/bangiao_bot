@@ -1,7 +1,6 @@
 package com.zhazha.cqhttp.filter;
 
 import cn.hutool.core.collection.CollUtil;
-import com.zhazha.cqhttp.exception.NotifyException;
 import com.zhazha.cqhttp.vo.BaseVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
 
@@ -25,7 +24,7 @@ public class MessageFilterChain {
 		this.filters.add(messageFilter);
 	}
 	
-	public ReplyVO doChain(BaseVO vo, MessageFilterChain chain) throws Exception, NotifyException {
+	public ReplyVO doChain(BaseVO vo, MessageFilterChain chain) throws Exception {
 		if (CollUtil.isEmpty(this.filters)) {
 			return ReplyVO.builder()
 					.at_sender(true)

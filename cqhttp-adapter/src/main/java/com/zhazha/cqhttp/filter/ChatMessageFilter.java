@@ -8,7 +8,6 @@ import com.zhazha.cqhttp.chat.ChatEngine;
 import com.zhazha.cqhttp.constants.ConfigType;
 import com.zhazha.cqhttp.constants.Constants;
 import com.zhazha.cqhttp.repository.ConfigRepository;
-import com.zhazha.cqhttp.utils.ReplyUtils;
 import com.zhazha.cqhttp.vo.BaseVO;
 import com.zhazha.cqhttp.vo.MessageVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
@@ -69,7 +68,7 @@ public class ChatMessageFilter implements MessageFilter {
         } else if (StrUtil.startWithIgnoreCase(rawMessage, CMD_CHAT_OL)) {
             return messageEmit(messageVO, rawMessage);
         }
-        return ReplyUtils.build("指令不正确\n");
+        return ReplyVO.build("指令不正确\n");
     }
     
     private ReplyVO messageEmit(MessageVO messageVO, String rawMessage) {
@@ -83,7 +82,7 @@ public class ChatMessageFilter implements MessageFilter {
     }
     
     private ReplyVO help() {
-        return ReplyUtils.build(
+        return ReplyVO.build(
                 ChatMessageFilter.CMD_CHAT_OL + "你好, openAI\n" +
                         ChatMessageFilter.CMD_CHAT_ADD + " 123456789\n"+
                         ChatMessageFilter.CMD_CHAT_DEL + "\n" +

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-@Component("request")
+@Component("com/zhazha/cqhttp/request")
 public class RequestMessageHandler implements IMessageHandler {
     @Nullable
     @Override

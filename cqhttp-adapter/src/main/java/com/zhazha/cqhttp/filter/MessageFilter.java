@@ -1,8 +1,6 @@
 package com.zhazha.cqhttp.filter;
 
-import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqhttp.vo.BaseVO;
-import com.zhazha.cqhttp.vo.MessageVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
 
 public interface MessageFilter {
@@ -17,7 +15,4 @@ public interface MessageFilter {
 		return doFilter(vo, chain);
 	}
 	
-	default String getRawMessage(MessageVO vo) {
-		return StrUtil.trimStart(vo.getRaw_message());
-	}
 }

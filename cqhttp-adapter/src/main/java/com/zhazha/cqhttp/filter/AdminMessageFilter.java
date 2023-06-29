@@ -1,19 +1,17 @@
 package com.zhazha.cqhttp.filter;
 
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.StrUtil;
 import com.zhazha.cqhttp.bean.User;
 import com.zhazha.cqhttp.constants.Constants;
 import com.zhazha.cqhttp.constants.UserType;
 import com.zhazha.cqhttp.exception.NotifyException;
 import com.zhazha.cqhttp.repository.UserRepository;
-import com.zhazha.cqhttp.utils.ReplyUtils;
 import com.zhazha.cqhttp.vo.BaseVO;
 import com.zhazha.cqhttp.vo.MessageVO;
 import com.zhazha.cqhttp.vo.ReplyVO;
 import jakarta.annotation.Resource;
-import kotlin.Pair;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,10 +61,9 @@ public class AdminMessageFilter implements MessageFilter {
             // 删除
             return deleteAdmin(rawMessage);
         }
-        return ReplyUtils.build("指令不正确\n");
+        return ReplyVO.build("指令不正确\n");
     }
     
-    @NotNull
     private Long getSendUserId(MessageVO messageVO) {
         Long sendUserId = messageVO.getUser_id();
         if (!StrUtil.equalsIgnoreCase(sendUserId.toString(), Constants.ADMIN_QQ)) {
@@ -78,24 +75,24 @@ public class AdminMessageFilter implements MessageFilter {
     private ReplyVO deleteAdmin(String raw_message) {
         String qq = getQq(raw_message, CMD_ADMIN_DEL);
         if (StrUtil.isBlank(qq)) {
-            return ReplyUtils.build("没有该用户");
+            return ReplyVO.build("没有该用户");
         }
         userRepository.removeById(qq);
-        return ReplyUtils.build("删除成功");
+        return ReplyVO.build("删除成功");
     }
     
     private ReplyVO listAdmin() {
         List<User> list = userRepository.list();
-        return ReplyUtils.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()));
+        return ReplyVO.build(Arrays.toString(list.stream().map(user -> new Pair<>(user.getQq(), user.getType()).toString() + "\n").toArray()));
     }
     
     private ReplyVO getAdmin(String raw_message) {
         String qq = getQq(raw_message, CMD_ADMIN_GET);
         User user = userRepository.getAdmin(qq);
         if (user == null) {
-            return ReplyUtils.build("没有数据");
+            return ReplyVO.build("没有数据");
         }
-        return ReplyUtils.build("读取成功: " + user);
+        return ReplyVO.build("读取成功: " + user);
     }
     
     private ReplyVO blockAdmin(MessageVO messageVO) {
@@ -104,7 +101,7 @@ public class AdminMessageFilter implements MessageFilter {
         User user = getAdmin(messageVO, qq);
         user.setType(UserType.BLOCK.name());
         userRepository.saveOrUpdate(user);
-        return ReplyUtils.build("拉黑成功");
+        return ReplyVO.build("拉黑成功");
     }
     
     private User getAdmin(MessageVO messageVO, String qq) {
@@ -117,7 +114,6 @@ public class AdminMessageFilter implements MessageFilter {
         return user;
     }
     
-    @NotNull
     private String getQq(String rawMessage, String cmd) {
         return rawMessage.replaceFirst(cmd, "").trim();
     }
@@ -132,7 +128,7 @@ public class AdminMessageFilter implements MessageFilter {
                 .qq(qq)
                 .build();
         userRepository.saveOrUpdate(user);
-        return ReplyUtils.build("注册成功");
+        return ReplyVO.build("注册成功");
     }
     
     private void addCheck(String qq) {

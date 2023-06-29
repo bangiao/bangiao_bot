@@ -16,7 +16,7 @@ public class MessageController {
 	@Resource
 	private MessageDispatcher messageDispatcher;
 	
-	@RequestMapping("")
+	@RequestMapping("/")
 	public ReplyVO post(@RequestBody Map<String, Object> maps, HttpServletResponse response) throws Exception {
 		ReplyVO vo = messageDispatcher.dispatch(maps);
 		if (vo == null) {
